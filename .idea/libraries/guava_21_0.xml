@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="guava-21.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/com/google/guava/guava/21.0/guava-21.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

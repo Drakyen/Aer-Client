@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="fastutil-7.1.0">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/it/unimi/dsi/fastutil/7.1.0/fastutil-7.1.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="3.0.1">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/jars/libraries/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1.jar!/" />
+      <root url="jar://$PROJECT_DIR$/jars/libraries/com/google/code/findbugs/jsr305/3.0.1/jsr305-3.0.1-sources.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
