@@ -16,35 +16,35 @@ public class ConfigHandler {
 
 
 	/**
-	 * Saves a set of properties to the given file, using default path of /aer/configs
-	 */
+     * Saves a set of properties to the given file, using default path of /minecraft.net.aer/configs
+     */
 	public static void saveSettings(String name, Properties settings) {
-		configFile = new File("aer/configs/" + name + ".config.properties");
-		if (!configFile.exists()) {
-			if (!createFile(configFile)) {
-				return;
-			}
-		}
-		saveSettings(settings, configFile, name);
-	}
+        configFile = new File("minecraft.net.aer/configs/" + name + ".config.properties");
+        if (!configFile.exists()) {
+            if (!createFile(configFile)) {
+                return;
+            }
+        }
+        saveSettings(settings, configFile, name);
+    }
 
-	/**
-	 * Loads a set of properties from the given file, using default path of /aer/configs
-	 *
-	 * @param defaults
-	 * @return The properties that were loaded, or the defaults passed to it if the file couldn't be loaded.
+    /**
+     * Loads a set of properties from the given file, using default path of /minecraft.net.aer/configs
+     *
+     * @param defaults
+     * @return The properties that were loaded, or the defaults passed to it if the file couldn't be loaded.
 	 */
 	public static Properties loadSettings(String name, Properties defaults) {
-		configFile = new File("aer/configs/" + name + ".config.properties");
-		if (!configFile.exists()) {
-			if (createFile(configFile)) {
-				saveSettings(defaults, configFile, name);
-			} else {
-				if (createDir("aer/configs/")) {
-					if (createFile(configFile)) {
-						saveSettings(defaults, configFile, name);
-					}
-				}
+        configFile = new File("minecraft.net.aer/configs/" + name + ".config.properties");
+        if (!configFile.exists()) {
+            if (createFile(configFile)) {
+                saveSettings(defaults, configFile, name);
+            } else {
+                if (createDir("minecraft.net.aer/configs/")) {
+                    if (createFile(configFile)) {
+                        saveSettings(defaults, configFile, name);
+                    }
+                }
 			}
 			return defaults;
 		}

@@ -15,6 +15,7 @@ public class ClickGui extends Module {
 	private NumberValue red = new NumberValue("Red", 0f, 0f, 1f);
 	private NumberValue green = new NumberValue("Green", 0.6f, 0f, 1f);
 	private NumberValue blue = new NumberValue("Blue", 0.4f, 0f, 1f);
+	private NumberValue alpha = new NumberValue("Alpha", 0.8f, 0.5f, 1f);
 	private BooleanValue blur = new BooleanValue("Blur", true);
 
 	public ClickGui() {
@@ -22,13 +23,13 @@ public class ClickGui extends Module {
 	}
 
 	public void onEnable() {
-		Aer.clickGui.changeCol(new Color(red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue()));
+		Aer.clickGui.setCol(new Color(red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue(), alpha.getValue().floatValue()));
 		minecraft.displayGuiScreen(Aer.clickGui);
 		this.setActiveState(false);
 	}
 
 	public void onGuiValueUpdate() {
-		Aer.clickGui.changeCol(new Color(red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue()));
+		Aer.clickGui.setCol(new Color(red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue(), alpha.getValue().floatValue()));
 	}
 
 }

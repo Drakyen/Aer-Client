@@ -1,144 +1,95 @@
 package net.aer.gui.clickgui.elements;
 
+import net.aer.gui.GuiStyle;
 import net.aer.module.Module;
-import net.aer.render.render2D.Fonts;
-import net.aer.render.render2D.RenderUtils2D;
-import net.aer.utils.threads.ColourFadeThread;
-import net.aer.utils.threads.ColourFadeable;
 import net.aer.utils.valuesystem.*;
 
-import java.awt.*;
 import java.util.ArrayList;
 
-public class ModuleButton extends ColourFadeable {
+public class ModuleButton {
 
-	public Panel parent;
-	public String name;
-	public Module module;
-	private int width;
-	private int height;
-	int offset = 0;
-	private Color fade;
-	public boolean extended;
-	private int y;
-	private int x;
-	private int alpha;
-	public ArrayList<Element> menuElements = new ArrayList<>();
-	public int hoveredTimer = 0;
+    public ArrayList<Element> menuElements = new ArrayList<>();
 
+    private GuiStyle style;
 
-	public ModuleButton(Module m, String name, Panel elementPanel, int width, int height, boolean extended) {
-		this.module = m;
-		this.name = name;
-		this.parent = elementPanel;
-		this.width = width;
-		this.height = height;
-		this.current = parent.backgroundcol;
-		this.extended = extended;
+    private Panel parent;
+    private String name;
+    private Module module;
 
-		this.setupCols();
+    private int y;
+    private int x;
+    private int width;
+    private int height;
+
+    private int hoverTimer = 0;
+    private int offset = 0;
+    private boolean extended;
 
 
-		this.addElements();
-	}
+    public ModuleButton(Module moduleIn, Panel parentIn, GuiStyle styleIn, boolean extendedIn) {
+        this.style = styleIn;
+        this.module = moduleIn;
+        this.name = module.getName();
+        this.parent = parentIn;
+        this.width = style.getModuleWidth();
+        this.height = style.getModuleHeight();
+        this.extended = extendedIn;
+
+        this.addElements();
+    }
 
 
-	private void setupCols() {
-		this.alpha = parent.col.getAlpha();
-		fade = parent.col;
-
-		this.runFade();
-
-	}
-
-
-	private void runFade() {
-		try {
-			fade = parent.col;
-			if (this.module.isActive()) {
-				Thread thread = new Thread(new ColourFadeThread(parent.backgroundcol, fade.brighter().brighter(), 250, this));
-				thread.start();
-			} else {
-				Thread thread = new Thread(new ColourFadeThread(fade.brighter().brighter(), parent.backgroundcol, 250, this));
-				thread.start();
-			}
-
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-	}
-
-
-	private void addElements() {
-		for (Value v : ValueManager.getAllValuesFrom(module.getName())) {
-			addElement(v);
-		}
-		menuElements.add(new ElementKeybinding(module, width, height - 2, this));
-	}
+    private void addElements() {
+        for (Value v : ValueManager.getAllValuesFrom(module.getName())) {
+            addElement(v);
+        }
+        menuElements.add(new ElementKeybinding(module, this, style));
+    }
 
 
 	private void addElement(Value v) {
 		if (v instanceof BooleanValue) {
-			menuElements.add(new ElementToggle(v, width, height - 2, this));
-		}
-		if (v instanceof ModeValue) {
-			menuElements.add(new ElementSelector(v, width, height - 2, this));
-		}
-		if (v instanceof NumberValue) {
-			menuElements.add(new ElementSlider(v, width, height - 2, this));
-		}
+            menuElements.add(new ElementToggle(v, this, style));
+        }
+        if (v instanceof ModeValue) {
+            menuElements.add(new ElementSelector(v, this, style));
+        }
+        if (v instanceof NumberValue) {
+            menuElements.add(new ElementSlider(v, this, style));
+        }
 
-	}
-
-
-	public void drawScreen(int x, int y, int mouseX, int mouseY) {
-		this.x = x;
-		this.y = y;
-		Color col = this.current;
-		Color backgroundcol = new Color(col.getRed(), col.getGreen(), col.getBlue(), 200).darker();
-		Color textcol = new Color(col.brighter().getRed(), col.brighter().getGreen(), col.brighter().getBlue(), 255);
+    }
 
 
-		RenderUtils2D.drawRect(x, y, x + 1, y + height, 0xff000000);
-		RenderUtils2D.drawRect(x + width - 1, y, x + width, y + height, 0xff000000);
-		RenderUtils2D.drawGradientRectVert(x + 1, y, x + width - 1, y + height, 0, backgroundcol.getRGB(), backgroundcol.darker().getRGB());
-		RenderUtils2D.drawCenteredString(Fonts.normal, this.name, x + width / 2, y + height / 2, textcol.brighter().getRGB(), true);
-		this.offset = 0;
-		if (this.extended) {
-			for (Element e : this.menuElements) {
-				e.drawScreen(x, y + this.height + this.offset, mouseX, mouseY);
-				this.offset += e.height + e.offset - 1;
-			}
-		}
-		if (this.hovered(mouseX, mouseY)) {
-			hoveredTimer++;
-		} else {
-			hoveredTimer = 0;
-		}
+    public void drawScreen(int xIn, int yIn, int mouseX, int mouseY) {
+        this.x = xIn;
+        this.y = yIn;
 
-		if (hoveredTimer > 50) {
-			parent.setHoveredModule(this);
-		}
+        style.drawModule(this);
 
-	}
+        if (this.hovered(mouseX, mouseY)) {
+            hoverTimer++;
+            if (hoverTimer >= style.getHoverTime()) {
+                style.drawDescription(this);
+            }
+        } else {
+            hoverTimer = 0;
+        }
+
+        this.offset = style.getModuleHeight();
+
+        if (this.extended) {
+            for (Element e : this.menuElements) {
+                e.drawScreen(x, y + offset, mouseX, mouseY);
+                this.offset += style.getOptionHeight() + e.offset;
+            }
+        }
+    }
 
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		if (hovered(mouseX, mouseY) && mouseButton == 0) {
 			this.module.toggle();
-			try {
-				fade = parent.col;
-				if (this.module.isActive()) {
-					Thread thread = new Thread(new ColourFadeThread(parent.backgroundcol, fade.brighter().brighter(), 250, this));
-					thread.start();
-				} else {
-					Thread thread = new Thread(new ColourFadeThread(fade.brighter().brighter(), parent.backgroundcol, 250, this));
-					thread.start();
-				}
-
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
 		}
 		if (hovered(mouseX, mouseY) && mouseButton == 1) {
 			this.extended = !this.extended;
@@ -167,27 +118,48 @@ public class ModuleButton extends ColourFadeable {
 		}
 	}
 
-	public boolean hovered(int mouseX, int mouseY) {
-		return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
-	}
-
-	public void resetCols() {
-		fade = parent.col;
-		if (module.isActive()) {
-			this.current = fade.brighter().brighter();
-		} else {
-			this.current = parent.backgroundcol;
-		}
-		for (Element e : menuElements) {
-			e.resetCols();
-		}
-
-	}
+    public boolean hovered(int mouseX, int mouseY) {
+        return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+    }
 
 
-	public void ValueUpdated() {
-		this.module.onGuiValueUpdate();
-	}
+    public void ValueUpdated() {
+        this.module.onGuiValueUpdate();
+    }
 
+    public Panel getParent() {
+        return parent;
+    }
 
+    public String getName() {
+        return name;
+    }
+
+    public Module getModule() {
+        return module;
+    }
+
+    public int getY() {
+        return y;
+    }
+
+    public int getX() {
+        return x;
+    }
+
+    public int getWidth() {
+        return width;
+    }
+
+    public int getHeight() {
+        return height;
+    }
+
+    public boolean isExtended() {
+        return extended;
+    }
+
+    public int getOffset() {
+        return offset;
+    }
 }

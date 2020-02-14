@@ -2,14 +2,9 @@ package net.aer.gui;
 
 import net.aer.Aer;
 import net.aer.gui.clickgui.elements.Element;
-import net.aer.gui.clickgui.elements.ElementKeybinding;
 import net.aer.gui.clickgui.elements.ModuleButton;
 import net.aer.gui.clickgui.elements.Panel;
 import net.aer.module.Category;
-import net.aer.render.RainbowUtil;
-import net.aer.render.render2D.CustomFontRenderer;
-import net.aer.render.render2D.Fonts;
-import net.aer.render.render2D.RenderUtils2D;
 import net.aer.utils.config.ConfigHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;
@@ -26,11 +21,8 @@ import java.util.Properties;
 public class ClickGui extends GuiScreen {
 
 	public static ArrayList<Panel> panels;
-
-	private RainbowUtil rainbow = new RainbowUtil(2);
-	public Color col;
-	private CustomFontRenderer font = Fonts.normal;
 	public Properties ClickGuiProps;
+	private GuiStyle style;
 
 	private ModuleButton hoveredModule;
 
@@ -38,47 +30,28 @@ public class ClickGui extends GuiScreen {
 
 	private boolean isBlurred;
 
-	public ClickGui() {
+	public ClickGui(GuiStyle styleIn) {
+
+		style = styleIn;
 
 		ClickGuiProps = ConfigHandler.loadSettings("ClickGuiProps", new Properties());
 
-		panels = new ArrayList<>();
-		col = new Color(0, 20, 200, 255);
-
-		int px = 10;
-		int py = 10;
-		int pyd = 10;
-		int pw = 90;
-		int ph = 15;
-		boolean panelExtended = false;
-
-		for (Category c : Category.values()) {
-			if (c != Category.HIDDEN) {
-				String panelName = c.name().toUpperCase();
-				if (ClickGuiProps.containsKey(panelName + "xPos")) {
-					px = Integer.parseInt(ClickGuiProps.getProperty(panelName + "xPos"));
-				} else {
-					px = 10;
-				}
-				if (ClickGuiProps.containsKey(panelName + "yPos")) {
-					py = Integer.parseInt(ClickGuiProps.getProperty(panelName + "yPos"));
-				} else {
-					py = pyd;
-				}
-				if (ClickGuiProps.containsKey(panelName + "extended")) {
-					panelExtended = Boolean.parseBoolean((ClickGuiProps.getProperty(panelName + "extended")));
-				} else {
-					panelExtended = false;
-				}
-				panels.add(new Panel(px, py, pw, ph, panelName, panelExtended, c, this));
-
-				pyd += 50;
-			}
-		}
+		createPanels(style);
 
 	}
 
+
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+
+		ScaledResolution res = new ScaledResolution(Aer.minecraft);
+		this.style.setRes(res);
+		this.style.setMouseX(mouseX);
+		this.style.setMouseY(mouseY);
+
+		for (Panel p : panels) {
+			p.drawScreen(mouseX, mouseY);
+		}
+
 		if (blurMode != isBlurred) {
 			if (blurMode) {
 				if (OpenGlHelper.shadersSupported && mc.getRenderViewEntity() instanceof EntityPlayer) {
@@ -96,25 +69,38 @@ public class ClickGui extends GuiScreen {
 				isBlurred = false;
 			}
 		}
-		for (Panel p : panels) {
-			p.drawScreen(mouseX, mouseY, partialTicks);
-		}
-		if (hoveredModule != null && hoveredModule.hoveredTimer > 50) {
-			ScaledResolution res = new ScaledResolution(Aer.minecraft);
-			if (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription()) > res.getScaledWidth()) {
-				RenderUtils2D.drawGradientRectHoriz((int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())), mouseY, mouseX, mouseY + 16, 0f, 0xaa333333, col.darker().darker().getRGB());
-				RenderUtils2D.drawRect(mouseX, mouseY, (int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())), mouseY - 1, 0xaa333333);
-				RenderUtils2D.drawRect(mouseX, mouseY + 16, (int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())), mouseY + 15, 0xaa333333);
-				RenderUtils2D.drawRect((int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())), mouseY, (int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())) + 1, mouseY + 16, 0xaa333333);
-				RenderUtils2D.drawRect((int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())), mouseY, (int) (mouseX - 12 - font.getStringWidth(hoveredModule.module.getDescription())) + 1, mouseY + 16, 0xaa333333);
-				RenderUtils2D.drawString(font, hoveredModule.module.getDescription(), mouseX - 5 - font.getStringWidth(hoveredModule.module.getDescription()), mouseY + 4, col.brighter().getRGB(), true);
-			} else {
-				RenderUtils2D.drawGradientRectHoriz(mouseX, mouseY, (int) (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription())), mouseY + 16, 0f, 0xaa333333, col.darker().darker().getRGB());
-				RenderUtils2D.drawRect(mouseX, mouseY, (int) (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription())), mouseY - 1, 0xaa333333);
-				RenderUtils2D.drawRect(mouseX, mouseY + 16, (int) (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription())), mouseY + 15, 0xaa333333);
-				RenderUtils2D.drawRect(mouseX, mouseY, mouseX + 1, mouseY + 16, 0xaa333333);
-				RenderUtils2D.drawRect((int) (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription())), mouseY, (int) (mouseX + 12 + font.getStringWidth(hoveredModule.module.getDescription())) - 1, mouseY + 16, 0xaa333333);
-				RenderUtils2D.drawString(font, hoveredModule.module.getDescription(), mouseX + 10, mouseY + 4, col.brighter().getRGB(), true);
+	}
+
+	private void createPanels(GuiStyle style) {
+
+		panels = new ArrayList<>();
+
+		int px;
+		int py;
+		int pyo = 10;
+		boolean panelExtended = false;
+
+		for (Category c : Category.values()) {
+			if (c != Category.HIDDEN) {
+				String panelName = c.name().toUpperCase();
+				if (ClickGuiProps.containsKey(panelName + "xPos")) {
+					px = Integer.parseInt(ClickGuiProps.getProperty(panelName + "xPos"));
+				} else {
+					px = 10;
+				}
+				if (ClickGuiProps.containsKey(panelName + "yPos")) {
+					py = Integer.parseInt(ClickGuiProps.getProperty(panelName + "yPos"));
+				} else {
+					py = pyo;
+				}
+				if (ClickGuiProps.containsKey(panelName + "extended")) {
+					panelExtended = Boolean.parseBoolean((ClickGuiProps.getProperty(panelName + "extended")));
+				} else {
+					panelExtended = false;
+				}
+				panels.add(new Panel(px, py, style, panelName, panelExtended, c, this));
+
+				pyo += 50;
 			}
 		}
 	}
@@ -142,18 +128,6 @@ public class ClickGui extends GuiScreen {
 	}
 
 	private boolean keybindListening() {
-		boolean flag = false;
-		for (Panel p : panels) {
-			for (ModuleButton em : p.modules) {
-				for (Element e : em.menuElements) {
-					if (e instanceof ElementKeybinding) {
-						if (((ElementKeybinding) e).listening) {
-							return true;
-						}
-					}
-				}
-			}
-		}
 		return false;
 	}
 
@@ -175,22 +149,16 @@ public class ClickGui extends GuiScreen {
 			mc.entityRenderer.theShaderGroup = null;
 		}
 		for (Panel p : panels) {
-			ClickGuiProps.setProperty(p.name + "xPos", "" + p.x);
-			ClickGuiProps.setProperty(p.name + "yPos", "" + p.y);
-			ClickGuiProps.setProperty(p.name + "extended", "" + p.extended);
-			for (ModuleButton m : p.modules) {
-				ClickGuiProps.setProperty(m.name + "extended", "" + m.extended);
+			ClickGuiProps.setProperty(p.getName() + "xPos", "" + p.x);
+			ClickGuiProps.setProperty(p.getName() + "yPos", "" + p.y);
+			ClickGuiProps.setProperty(p.getName() + "extended", "" + p.isExtended());
+			for (ModuleButton m : p.getModules()) {
+				ClickGuiProps.setProperty(m.getName() + "extended", "" + m.isExtended());
 			}
 		}
 		ConfigHandler.saveSettings("ClickGuiProps", ClickGuiProps);
 	}
 
-	public void changeCol(Color newCol) {
-		col = newCol;
-		for (Panel p : panels) {
-			p.resetCols();
-		}
-	}
 
 	public void setHoveredModule(ModuleButton moduleButton) {
 		this.hoveredModule = moduleButton;
@@ -207,5 +175,15 @@ public class ClickGui extends GuiScreen {
 		}
 	}
 
+	public void setCol(Color col) {
+		style.setCol(col);
+		for (Panel p : panels) {
+			for (ModuleButton button : p.getModules()) {
+				for (Element e : button.menuElements) {
+					e.updateCols();
+				}
+			}
+		}
+	}
 
 }

@@ -7,15 +7,14 @@ public class ColourFadeThread implements Runnable {
 	private Color start;
 	private Color end;
 	private int time;
-	public Color current;
-	private ColourFadeable output;
+	private ColourFadeable out;
 
 	public ColourFadeThread(Color start, Color end, int time, ColourFadeable output) {
 		this.start = start;
 		this.end = end;
 		this.time = time;
-		this.current = start;
-		this.output = output;
+		this.out = output;
+		out.colOut = start;
 	}
 
 
@@ -42,7 +41,7 @@ public class ColourFadeThread implements Runnable {
 			green += greenDif;
 			blue += blueDif;
 			alpha += alphaDif;
-			output.current = new Color((int) red, (int) green, (int) blue, (int) alpha);
+			out.colOut = new Color((int) red, (int) green, (int) blue, (int) alpha);
 			try {
 				Thread.sleep(1);
 			} catch (InterruptedException e) {

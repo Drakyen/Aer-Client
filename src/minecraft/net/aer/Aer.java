@@ -2,6 +2,7 @@ package net.aer;
 
 import net.aer.command.CommandManager;
 import net.aer.gui.ClickGui;
+import net.aer.gui.styles.SciFiStyle;
 import net.aer.module.Module;
 import net.aer.module.ModuleManager;
 import net.aer.render.render2D.Fonts;
@@ -23,15 +24,15 @@ public class Aer {
 
 	public static void load() {
 
-		defaults.setProperty("CmdPrefix", ".");
-		settings = ConfigHandler.loadSettings("Aer", defaults);
+        defaults.setProperty("CmdPrefix", ".");
+        settings = ConfigHandler.loadSettings("Aer", defaults);
 
-		Fonts.load();
-		ModuleManager.init();
-		CommandManager.init();
-		clickGui = new ClickGui();
+        Fonts.load();
+        ModuleManager.init();
+        CommandManager.init();
+        clickGui = new ClickGui(new SciFiStyle());
 
-	}
+    }
 
 	public static void shutdown() {
 		ConfigHandler.saveAllSettings();
