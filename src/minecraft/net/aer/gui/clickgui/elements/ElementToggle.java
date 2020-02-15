@@ -26,6 +26,15 @@ public class ElementToggle extends Element {
 		this.current = this.colOut;
 
 		style.drawElement(this);
+
+		if (this.hovered(mouseX, mouseY)) {
+			hoverTimer++;
+			if (hoverTimer >= style.getHoverTime()) {
+				style.drawToolTip("null", mouseX, mouseY);
+			}
+		} else {
+			hoverTimer = 0;
+		}
 	}
 
 	private void fade() {

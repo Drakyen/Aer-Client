@@ -55,7 +55,7 @@ public class Panel {
             x = mouseX + xo;
             y = mouseY + yo;
         }
-        style.drawPanel(this, mouseX, mouseY);
+        style.drawPanel(this);
         int offset = 0;
         if (this.isExtended()) {
             for (ModuleButton button : modules) {

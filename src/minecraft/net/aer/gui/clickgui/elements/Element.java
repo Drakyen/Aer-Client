@@ -19,6 +19,7 @@ public abstract class Element extends ColourFadeable {
 
     protected int offset = 0;
 
+    protected int hoverTimer = 0;
 
     public Element(Value val, ModuleButton parent, GuiStyle styleIn) {
         this.style = styleIn;

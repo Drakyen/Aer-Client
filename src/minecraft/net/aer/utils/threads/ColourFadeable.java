@@ -4,4 +4,5 @@ import java.awt.*;
 
 public abstract class ColourFadeable {
     public Color colOut;
+
 }

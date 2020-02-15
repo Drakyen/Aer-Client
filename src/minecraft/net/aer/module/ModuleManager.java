@@ -30,15 +30,18 @@ public class ModuleManager {
 	 * Loads all modules into this ModuleManager, and loads the settings for each of those modules
 	 */
 	public static void init() {
-		loadModules();
-		for (Module module : moduleList) {
-			ValueManager.registerObject(module.getName(), module);
-			if (module.getCategory() != Category.HIDDEN) {
-				visibleModuleList.add(module);
-			}
-		}
-		ValueManager.loadValues();
-	}
+        loadModules();
+        for (Module module : moduleList) {
+            ValueManager.registerObject(module.getName(), module);
+            if (module.getCategory() != Category.HIDDEN) {
+                visibleModuleList.add(module);
+            }
+        }
+        ValueManager.loadValues();
+        for (Module module : moduleList) {
+            module.setup();
+        }
+    }
 
 	/**
 	 * Loads all modules into this ModuleManager

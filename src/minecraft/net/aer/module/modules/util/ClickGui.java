@@ -12,9 +12,9 @@ import java.awt.*;
 
 public class ClickGui extends Module {
 
-	private NumberValue red = new NumberValue("Red", 0f, 0f, 1f);
-	private NumberValue green = new NumberValue("Green", 0.6f, 0f, 1f);
-	private NumberValue blue = new NumberValue("Blue", 0.4f, 0f, 1f);
+	private NumberValue red = new NumberValue("Red", 0.5f, 0.5f, 1f);
+	private NumberValue green = new NumberValue("Green", 0.9f, 0.5f, 1f);
+	private NumberValue blue = new NumberValue("Blue", 0.6f, 0.5f, 1f);
 	private NumberValue alpha = new NumberValue("Alpha", 0.8f, 0.5f, 1f);
 	private BooleanValue blur = new BooleanValue("Blur", true);
 

@@ -2,11 +2,14 @@ package net.aer.gui.clickgui.elements;
 
 import net.aer.gui.GuiStyle;
 import net.aer.module.Module;
+import net.aer.utils.threads.ColourFadeThread;
+import net.aer.utils.threads.ColourFadeable;
 import net.aer.utils.valuesystem.*;
 
+import java.awt.*;
 import java.util.ArrayList;
 
-public class ModuleButton {
+public class ModuleButton extends ColourFadeable {
 
     public ArrayList<Element> menuElements = new ArrayList<>();
 
@@ -25,6 +28,9 @@ public class ModuleButton {
     private int offset = 0;
     private boolean extended;
 
+    private Color current = new Color(0x00000000, true);
+    private boolean currentState;
+
 
     public ModuleButton(Module moduleIn, Panel parentIn, GuiStyle styleIn, boolean extendedIn) {
         this.style = styleIn;
@@ -34,7 +40,7 @@ public class ModuleButton {
         this.width = style.getModuleWidth();
         this.height = style.getModuleHeight();
         this.extended = extendedIn;
-
+        this.currentState = module.isActive();
         this.addElements();
     }
 
@@ -65,12 +71,22 @@ public class ModuleButton {
         this.x = xIn;
         this.y = yIn;
 
+        if (module.isActive() != currentState) {
+            currentState = module.isActive();
+            fade();
+        }
+
+        if (this.colOut != null) {
+            this.current = this.colOut;
+        }
+
+
         style.drawModule(this);
 
         if (this.hovered(mouseX, mouseY)) {
             hoverTimer++;
             if (hoverTimer >= style.getHoverTime()) {
-                style.drawDescription(this);
+                style.drawDescription(module.getDescription(), mouseX, mouseY);
             }
         } else {
             hoverTimer = 0;
@@ -89,8 +105,10 @@ public class ModuleButton {
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
 		if (hovered(mouseX, mouseY) && mouseButton == 0) {
-			this.module.toggle();
-		}
+            this.module.toggle();
+            currentState = module.isActive();
+            fade();
+        }
 		if (hovered(mouseX, mouseY) && mouseButton == 1) {
 			this.extended = !this.extended;
 		}
@@ -112,14 +130,22 @@ public class ModuleButton {
 
 	public void keyTyped(char typedChar, int keyCode) {
 		if (this.extended) {
-			for (Element e : menuElements) {
-				e.keyTyped(typedChar, keyCode);
-			}
-		}
-	}
+            for (Element e : menuElements) {
+                e.keyTyped(typedChar, keyCode);
+            }
+        }
+    }
 
     public boolean hovered(int mouseX, int mouseY) {
         return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+    }
+
+    private void fade() {
+        if (this.module.isActive()) {
+            new Thread(new ColourFadeThread(this.current == null ? new Color(0x00000000, true) : this.current, style.getColour().darker(), 300, this)).start();
+        } else {
+            new Thread(new ColourFadeThread(this.current == null ? new Color(0x00000000, true) : this.current, new Color(0x00ffffff, true), 300, this)).start();
+        }
     }
 
 
@@ -161,5 +187,17 @@ public class ModuleButton {
 
     public int getOffset() {
         return offset;
+    }
+
+    public Color getCurrent() {
+        return current;
+    }
+
+    public void updateCols() {
+        if (module.isActive()) {
+            this.colOut = style.getColour().darker();
+        } else {
+            this.colOut = new Color(0x00ffffff, true);
+        }
     }
 }

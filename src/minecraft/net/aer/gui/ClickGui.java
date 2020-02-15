@@ -179,6 +179,7 @@ public class ClickGui extends GuiScreen {
 		style.setCol(col);
 		for (Panel p : panels) {
 			for (ModuleButton button : p.getModules()) {
+				button.updateCols();
 				for (Element e : button.menuElements) {
 					e.updateCols();
 				}

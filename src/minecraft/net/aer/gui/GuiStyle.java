@@ -37,13 +37,13 @@ public abstract class GuiStyle {
 
     public abstract void setCol(Color col);
 
-    public abstract void drawToolTip(Element option);
+    public abstract void drawToolTip(String tooltip, int mouseX, int mouseY);
 
-    public abstract void drawDescription(ModuleButton module);
+    public abstract void drawDescription(String description, int mouseX, int mouseY);
 
-    public abstract Panel drawPanel(Panel panel, int mouseX, int mouseY);
+    public abstract Panel drawPanel(Panel panel);
 
-    public abstract ModuleButton drawModule(ModuleButton module);
+    public abstract ModuleButton drawModule(ModuleButton button);
 
     public Element drawElement(Element option) {
         if (option instanceof ElementKeybinding) {

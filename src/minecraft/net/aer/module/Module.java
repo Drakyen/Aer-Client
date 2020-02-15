@@ -60,8 +60,6 @@ public class Module {
 		if (this.active) {
 			EventManager.register(this);
 		}
-		setup();
-
 	}
 
 

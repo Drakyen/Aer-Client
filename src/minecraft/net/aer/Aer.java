@@ -24,15 +24,16 @@ public class Aer {
 
 	public static void load() {
 
-        defaults.setProperty("CmdPrefix", ".");
-        settings = ConfigHandler.loadSettings("Aer", defaults);
+		defaults.setProperty("CmdPrefix", ".");
+		settings = ConfigHandler.loadSettings("Aer", defaults);
 
-        Fonts.load();
-        ModuleManager.init();
-        CommandManager.init();
-        clickGui = new ClickGui(new SciFiStyle());
+		Fonts.load();
+		ModuleManager.init();
+		CommandManager.init();
 
-    }
+		clickGui = new ClickGui(new SciFiStyle());
+
+	}
 
 	public static void shutdown() {
 		ConfigHandler.saveAllSettings();

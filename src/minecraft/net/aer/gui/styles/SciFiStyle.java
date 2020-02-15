@@ -20,7 +20,6 @@ public class SciFiStyle extends GuiStyle {
 
     public SciFiStyle() {
         super(100, 20, 100, 20, 100, 20, 20);
-
     }
 
     @Override
@@ -32,17 +31,17 @@ public class SciFiStyle extends GuiStyle {
     }
 
     @Override
-    public void drawToolTip(Element option) {
+    public void drawToolTip(String tooltip, int mouseX, int mouseY) {
 
     }
 
     @Override
-    public void drawDescription(ModuleButton module) {
+    public void drawDescription(String description, int mouseX, int mouseY) {
 
     }
 
     @Override
-    public Panel drawPanel(Panel panel, int mouseX, int mouseY) {
+    public Panel drawPanel(Panel panel) {
         int x = panel.x;
         int y = panel.y;
         int width = this.getPanelWidth();
@@ -68,6 +67,7 @@ public class SciFiStyle extends GuiStyle {
         RenderUtils2D.drawRect(x, y, x + 1, y + height, 0xff000000);
         RenderUtils2D.drawRect(x + width - 1, y, x + width, y + height, 0xff000000);
         RenderUtils2D.drawGradientRectVert(x + 1, y, x + width - 1, y + height, 0, backgroundCol.getRGB(), backgroundCol.darker().getRGB());
+        RenderUtils2D.drawGradientRectVert(x + 1, y, x + width - 1, y + height, 0, module.getCurrent().darker().getRGB(), module.getCurrent().getRGB());
         RenderUtils2D.drawCenteredString(Fonts.normal, module.getName(), x + width / 2, y + height / 2, textCol.brighter().getRGB(), true);
 
         return module;
