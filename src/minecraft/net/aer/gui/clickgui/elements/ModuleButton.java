@@ -12,6 +12,7 @@ import java.util.ArrayList;
 public class ModuleButton extends ColourFadeable {
 
     public ArrayList<Element> menuElements = new ArrayList<>();
+    public boolean hovered;
 
     private GuiStyle style;
 
@@ -58,7 +59,7 @@ public class ModuleButton extends ColourFadeable {
             menuElements.add(new ElementToggle(v, this, style));
         }
         if (v instanceof ModeValue) {
-            menuElements.add(new ElementSelector(v, this, style));
+            menuElements.add(new ElementSelector(v, this, style, style.getSelectorMode()));
         }
         if (v instanceof NumberValue) {
             menuElements.add(new ElementSlider(v, this, style));
@@ -70,6 +71,8 @@ public class ModuleButton extends ColourFadeable {
     public void drawScreen(int xIn, int yIn, int mouseX, int mouseY) {
         this.x = xIn;
         this.y = yIn;
+
+        hovered = this.hovered(mouseX, mouseY);
 
         if (module.isActive() != currentState) {
             currentState = module.isActive();
@@ -83,7 +86,7 @@ public class ModuleButton extends ColourFadeable {
 
         style.drawModule(this);
 
-        if (this.hovered(mouseX, mouseY)) {
+        if (hovered) {
             hoverTimer++;
             if (hoverTimer >= style.getHoverTime()) {
                 style.drawDescription(module.getDescription(), mouseX, mouseY);

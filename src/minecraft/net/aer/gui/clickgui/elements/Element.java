@@ -14,6 +14,8 @@ public abstract class Element extends ColourFadeable {
     protected int x;
     protected int y;
 
+    protected boolean hovered;
+
     protected int width;
     protected int height;
 
@@ -38,6 +40,12 @@ public abstract class Element extends ColourFadeable {
     public abstract void updateCols();
 
     public abstract void drawScreen(int x, int y, int mouseX, int mouseY);
+
+    protected abstract boolean hovered(int mouseX, int mouseY);
+
+    public boolean isHovered() {
+        return hovered;
+    }
 
     public String getName() {
         return setting.getName();

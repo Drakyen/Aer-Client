@@ -19,7 +19,7 @@ public class SciFiStyle extends GuiStyle {
     public Color col;
 
     public SciFiStyle() {
-        super(100, 20, 100, 20, 100, 20, 20);
+        super(100, 20, 100, 20, 100, 20, 20, true);
     }
 
     @Override
@@ -51,9 +51,6 @@ public class SciFiStyle extends GuiStyle {
         RenderUtils2D.drawGradientRectVert(x + width, y, x + width + 1, y + height, 0, 0xffffffff, 0xff000000);
         RenderUtils2D.drawCenteredString(Fonts.mid, panel.getName(), x + width / 2, y + height / 2, textCol.brighter().brighter().getRGB(), true);
 
-        if (panel.isExtended()) {
-            int offset = height;
-        }
         return panel;
     }
 

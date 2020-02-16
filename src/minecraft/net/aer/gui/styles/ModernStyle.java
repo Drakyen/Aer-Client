@@ -1,0 +1,174 @@
+package net.aer.gui.styles;
+
+import net.aer.gui.GuiStyle;
+import net.aer.gui.clickgui.elements.Panel;
+import net.aer.gui.clickgui.elements.*;
+import net.aer.render.render2D.Fonts;
+import net.aer.render.render2D.RenderUtils2D;
+import net.aer.utils.valuesystem.Value;
+import org.lwjgl.input.Keyboard;
+
+import java.awt.*;
+
+public class ModernStyle extends GuiStyle {
+
+    public Color col;
+    public Color backgroundCol;
+    public Color foregroundCol;
+
+    public ModernStyle() {
+        super(90, 15, 90, 15, 90, 15, 20, false);
+
+    }
+
+    @Override
+    public void setCol(Color colIn) {
+        colour = colIn;
+        col = new Color(colIn.getRGB());
+        backgroundCol = new Color(1, 1, 1, colIn.getAlpha());
+        foregroundCol = new Color(70, 70, 70, colIn.getAlpha());
+    }
+
+    @Override
+    public void drawToolTip(String tooltip, int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    public void drawDescription(String description, int mouseX, int mouseY) {
+
+    }
+
+    @Override
+    public Panel drawPanel(Panel panel) {
+        int x = panel.x;
+        int y = panel.y;
+        int width = this.getPanelWidth();
+        int height = this.getPanelHeight();
+        RenderUtils2D.drawRect(x, y, x + width, y + height, col.getRGB());
+        RenderUtils2D.drawString(Fonts.mid, panel.getName(), x + 3, y + 3, 0xffffffff, true);
+        RenderUtils2D.drawString(Fonts.mid, (panel.isExtended() ? "-" : "+"), x + width - 10, y + 2, 0xffffffff, true);
+        return panel;
+    }
+
+    @Override
+    public ModuleButton drawModule(ModuleButton module) {
+        int x = module.getX();
+        int y = module.getY();
+        int width = this.getModuleWidth();
+        int height = this.getModuleHeight();
+
+        RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
+
+        if (module.getModule().isActive()) {
+            if (module.hovered) {
+                RenderUtils2D.drawRect(x + 2, y, x + width - 2, y + height, col.darker().darker().getRGB());
+            } else {
+                RenderUtils2D.drawRect(x + 2, y, x + width - 2, y + height, col.darker().getRGB());
+            }
+            RenderUtils2D.drawString(Fonts.normal, module.getName(), x + 5, y + 5, 0xffffffff, true);
+        } else {
+            if (module.hovered) {
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().brighter().getRGB(), foregroundCol.brighter().getRGB());
+            } else {
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.getRGB(), foregroundCol.brighter().getRGB());
+            }
+            RenderUtils2D.drawString(Fonts.normal, module.getName(), x + 5, y + 5, 0xffaaaaaa, true);
+
+        }
+
+        return module;
+    }
+
+    @Override
+    protected Element drawElementKeybinding(ElementKeybinding option) {
+        int x = option.getX();
+        int y = option.getY();
+        int width = this.getOptionWidth();
+        int height = this.getOptionHeight();
+
+        RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
+
+        if (option.isHovered()) {
+            RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().brighter().getRGB(), foregroundCol.brighter().getRGB());
+        }
+
+        if (option.isListening()) {
+            RenderUtils2D.drawString(Fonts.normal, "Listening..", x + 5, y + 4, 0xffffffff, false);
+        } else {
+            RenderUtils2D.drawString(Fonts.normal, "Keybind \u00A7p[\u00A7r" + (option.getModule().getKeybind() != Keyboard.KEY_ESCAPE ? Keyboard.getKeyName(((ElementKeybinding) option).getModule().getKeybind()) : "NONE") + "\u00A7p]", x + 5, y + 4, 0xffffffff, false);
+        }
+
+
+        return option;
+    }
+
+    @Override
+    protected Element drawElementSelector(ElementSelector option) {
+        int x = option.getX();
+        int y = option.getY();
+        int width = this.getOptionWidth();
+        int height = this.getOptionHeight();
+
+        RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
+
+        if (option.isHovered()) {
+            RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().darker().getRGB());
+        } else {
+            RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().getRGB());
+        }
+
+        RenderUtils2D.drawString(Fonts.normal, option.getName() + " \u00A7p[\u00A7r" + option.getSetting().getObject() + "\u00A7p]", x + 5, y + 5, 0xffffffff, false);
+
+        return option;
+    }
+
+    @Override
+    protected Element drawElementSlider(ElementSlider option) {
+        int x = option.getX();
+        int y = option.getY();
+        int width = this.getOptionWidth();
+        int height = this.getOptionHeight();
+        Value setting = option.getSetting();
+        double percent = option.getPercent();
+
+        RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
+
+        double stretch = x + (width * percent) - 2 <= x + 2 ? x + 3 : x + (width * percent) - 2;
+        if (option.isHovered()) {
+            RenderUtils2D.drawRect(x + 2, y + 1, (int) stretch, y + height, col.darker().darker().getRGB());
+        } else {
+            RenderUtils2D.drawRect(x + 2, y + 1, (int) stretch, y + height, col.darker().getRGB());
+        }
+        RenderUtils2D.drawString(Fonts.normal, setting.getName() + " \u00A7p[\u00A7r" + setting.getObject() + "\u00A7p]", x + 5, y + 5, 0xffffffff, false);
+
+        return option;
+    }
+
+    @Override
+    protected Element drawElementToggle(ElementToggle option) {
+        int x = option.getX();
+        int y = option.getY();
+        int width = this.getOptionWidth();
+        int height = this.getOptionHeight();
+
+        RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
+
+        if (option.isToggled()) {
+            if (option.isHovered()) {
+                RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().darker().getRGB());
+            } else {
+                RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().getRGB());
+            }
+        } else {
+            if (option.isHovered()) {
+                RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, foregroundCol.brighter().getRGB());
+            }
+
+        }
+        RenderUtils2D.drawString(Fonts.normal, option.getName(), x + 5, y + 5, 0xffffffff, true);
+
+        return option;
+    }
+
+}

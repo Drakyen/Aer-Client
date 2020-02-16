@@ -25,7 +25,9 @@ public abstract class GuiStyle {
 
     protected int hoverTime;
 
-    public GuiStyle(int panelWidthIn, int panelHeightIn, int moduleWidthIn, int moduleHeightIn, int optionWidthIn, int optionHeightIn, int hoverTimeIn) {
+    protected boolean selectorExtendMode;
+
+    public GuiStyle(int panelWidthIn, int panelHeightIn, int moduleWidthIn, int moduleHeightIn, int optionWidthIn, int optionHeightIn, int hoverTimeIn, boolean selectorExtendModeIn) {
         panelWidth = panelWidthIn;
         panelHeight = panelHeightIn;
         moduleWidth = moduleWidthIn;
@@ -33,6 +35,7 @@ public abstract class GuiStyle {
         optionWidth = optionWidthIn;
         optionHeight = optionHeightIn;
         hoverTime = hoverTimeIn;
+        selectorExtendMode = selectorExtendModeIn;
     }
 
     public abstract void setCol(Color col);
@@ -113,6 +116,10 @@ public abstract class GuiStyle {
 
     public void setMouseY(int mouseY) {
         this.mouseY = mouseY;
+    }
+
+    public boolean getSelectorMode() {
+        return selectorExtendMode;
     }
 
 }

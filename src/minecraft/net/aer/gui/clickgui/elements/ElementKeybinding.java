@@ -20,9 +20,11 @@ public class ElementKeybinding extends Element {
         this.x = xIn;
         this.y = yIn;
 
+        this.hovered = hovered(mouseX, mouseY);
+
         style.drawElement(this);
 
-        if (this.hovered(mouseX, mouseY)) {
+        if (isHovered()) {
             hoverTimer++;
             if (hoverTimer >= style.getHoverTime()) {
                 style.drawToolTip("null", mouseX, mouseY);
@@ -44,7 +46,7 @@ public class ElementKeybinding extends Element {
     public void onMouseClicked(int mouseX, int mouseY, int button) {
         if (button == 0) {
             if (hovered(mouseX, mouseY)) {
-                this.listening = true;
+                this.listening = !this.listening;
             }
         }
     }
@@ -70,7 +72,8 @@ public class ElementKeybinding extends Element {
 
     }
 
-    private boolean hovered(int mouseX, int mouseY) {
+    @Override
+    protected boolean hovered(int mouseX, int mouseY) {
         return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
     }
 

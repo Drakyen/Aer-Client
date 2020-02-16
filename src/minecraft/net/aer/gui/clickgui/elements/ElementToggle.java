@@ -16,26 +16,29 @@ public class ElementToggle extends Element {
 	}
 
 	public void drawScreen(int x, int y, int mouseX, int mouseY) {
-		this.x = x;
-		this.y = y;
-		if (toggled != (boolean) setting.getObject()) {
-			toggled = (boolean) setting.getObject();
-			fade();
-		}
+        this.x = x;
+        this.y = y;
 
-		this.current = this.colOut;
+        this.hovered = hovered(mouseX, mouseY);
 
-		style.drawElement(this);
+        if (toggled != (boolean) setting.getObject()) {
+            toggled = (boolean) setting.getObject();
+            fade();
+        }
 
-		if (this.hovered(mouseX, mouseY)) {
-			hoverTimer++;
-			if (hoverTimer >= style.getHoverTime()) {
-				style.drawToolTip("null", mouseX, mouseY);
-			}
-		} else {
-			hoverTimer = 0;
-		}
-	}
+        this.current = this.colOut;
+
+        style.drawElement(this);
+
+        if (isHovered()) {
+            hoverTimer++;
+            if (hoverTimer >= style.getHoverTime()) {
+                style.drawToolTip("null", mouseX, mouseY);
+            }
+        } else {
+            hoverTimer = 0;
+        }
+    }
 
 	private void fade() {
 		if (this.isToggled()) {
@@ -46,26 +49,27 @@ public class ElementToggle extends Element {
 	}
 
 	public void onMouseClicked(int mouseX, int mouseY, int button) {
-		if (button == 0) {
-			if (hovered(mouseX, mouseY)) {
-				this.toggled = !this.toggled;
-				this.setting.setObject(this.toggled);
-				this.parent.ValueUpdated();
-				fade();
-			}
-		}
-	}
+        if (button == 0) {
+            if (hovered(mouseX, mouseY)) {
+                this.toggled = !this.toggled;
+                this.setting.setObject(this.toggled);
+                this.parent.ValueUpdated();
+                fade();
+            }
+        }
+    }
 
-	private boolean hovered(int mouseX, int mouseY) {
-		return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
-	}
+    @Override
+    protected boolean hovered(int mouseX, int mouseY) {
+        return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
+    }
 
-	public boolean isToggled() {
-		return toggled;
-	}
+    public boolean isToggled() {
+        return toggled;
+    }
 
-	@Override
-	public void onMouseReleased(int mouseX, int mouseY, int state) {
+    @Override
+    public void onMouseReleased(int mouseX, int mouseY, int state) {
 
 	}
 

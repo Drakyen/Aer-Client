@@ -2,7 +2,7 @@ package net.aer;
 
 import net.aer.command.CommandManager;
 import net.aer.gui.ClickGui;
-import net.aer.gui.styles.SciFiStyle;
+import net.aer.gui.styles.ModernStyle;
 import net.aer.module.Module;
 import net.aer.module.ModuleManager;
 import net.aer.render.render2D.Fonts;
@@ -31,7 +31,7 @@ public class Aer {
 		ModuleManager.init();
 		CommandManager.init();
 
-		clickGui = new ClickGui(new SciFiStyle());
+		clickGui = new ClickGui(new ModernStyle());
 
 	}
 

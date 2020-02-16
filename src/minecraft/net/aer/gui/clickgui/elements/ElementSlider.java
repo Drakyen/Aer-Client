@@ -22,7 +22,9 @@ public class ElementSlider extends Element {
         this.x = x;
         this.y = y;
 
-		if (isDragging()) {
+        this.hovered = hovered(mouseX, mouseY);
+
+        if (isDragging()) {
             double diff = ((NumberValue) setting).getMax().doubleValue() - ((NumberValue) setting).getMin().doubleValue();
             double val = ((NumberValue) setting).getMin().doubleValue() + (MathHelper.clamp((double) (mouseX - x) / (width - 2), 0, 1)) * diff;
             setting.setObject(Double.parseDouble(format.format(val)));
@@ -34,7 +36,7 @@ public class ElementSlider extends Element {
 
         style.drawElement(this);
 
-        if (this.hovered(mouseX, mouseY)) {
+        if (isHovered()) {
             hoverTimer++;
             if (hoverTimer >= style.getHoverTime()) {
                 style.drawToolTip("null", mouseX, mouseY);
@@ -57,17 +59,18 @@ public class ElementSlider extends Element {
 		this.dragging = false;
 	}
 
-	@Override
-	public void keyTyped(char typedChar, int key) {
-
-	}
-
-	@Override
-	public void updateCols() {
+    @Override
+    public void keyTyped(char typedChar, int key) {
 
     }
 
-    private boolean hovered(int mouseX, int mouseY) {
+    @Override
+    public void updateCols() {
+
+    }
+
+    @Override
+    protected boolean hovered(int mouseX, int mouseY) {
         return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
     }
 

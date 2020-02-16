@@ -2,6 +2,7 @@ package net.aer.gui;
 
 import net.aer.Aer;
 import net.aer.gui.clickgui.elements.Element;
+import net.aer.gui.clickgui.elements.ElementKeybinding;
 import net.aer.gui.clickgui.elements.ModuleButton;
 import net.aer.gui.clickgui.elements.Panel;
 import net.aer.module.Category;
@@ -128,6 +129,15 @@ public class ClickGui extends GuiScreen {
 	}
 
 	private boolean keybindListening() {
+		for (Panel p : panels) {
+			for (ModuleButton button : p.getModules()) {
+				for (Element e : button.menuElements) {
+					if (e instanceof ElementKeybinding && ((ElementKeybinding) e).isListening()) {
+						return true;
+					}
+				}
+			}
+		}
 		return false;
 	}
 

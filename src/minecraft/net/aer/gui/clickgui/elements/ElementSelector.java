@@ -8,17 +8,22 @@ public class ElementSelector extends Element {
 
     public boolean extended = false;
 
-    public ElementSelector(Value v, ModuleButton parent, GuiStyle style) {
+    private boolean extendMode = true;
+
+    public ElementSelector(Value v, ModuleButton parent, GuiStyle style, boolean extendMode) {
         super(v, parent, style);
+        this.extendMode = extendMode;
     }
 
     public void drawScreen(int x, int y, int mouseX, int mouseY) {
         this.x = x;
         this.y = y;
 
+        this.hovered = hovered(mouseX, mouseY);
+
         style.drawElement(this);
 
-        if (this.hovered(mouseX, mouseY)) {
+        if (isHovered()) {
             hoverTimer++;
             if (hoverTimer >= style.getHoverTime()) {
                 style.drawToolTip("null", mouseX, mouseY);
@@ -30,12 +35,58 @@ public class ElementSelector extends Element {
     }
 
     public void onMouseClicked(int mouseX, int mouseY, int button) {
-        if (hovered(mouseX, mouseY)) {
-            this.extended = !this.extended;
+        if (extendMode) {
+            if (hovered(mouseX, mouseY)) {
+                this.extended = !this.extended;
+            }
+            if (getHoveredOption(mouseX, mouseY) != "" && this.extended) {
+                this.setting.setObject(getHoveredOption(mouseX, mouseY));
+                this.parent.ValueUpdated();
+            }
+        } else {
+            if (hovered(mouseX, mouseY)) {
+                if (button == 0) {
+                    this.setting.setObject(nextMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
+                    this.parent.ValueUpdated();
+                }
+                if (button == 1) {
+                    this.setting.setObject(previousMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
+                    this.parent.ValueUpdated();
+                }
+            }
         }
-        if (getHoveredOption(mouseX, mouseY) != "" && this.extended) {
-            this.setting.setObject(getHoveredOption(mouseX, mouseY));
-            this.parent.ValueUpdated();
+
+    }
+
+    private String nextMode(String[] modes, String mode) {
+        int index = 1;
+        for (String string : modes) {
+            if (string.equals(mode)) {
+                break;
+            } else {
+                index++;
+            }
+        }
+        if (index == modes.length) {
+            return modes[0];
+        } else {
+            return modes[index];
+        }
+    }
+
+    private String previousMode(String[] modes, String mode) {
+        int index = 1;
+        for (String string : modes) {
+            if (string.equals(mode)) {
+                break;
+            } else {
+                index++;
+            }
+        }
+        if (index == 1) {
+            return modes[modes.length - 1];
+        } else {
+            return modes[index - 2];
         }
     }
 
@@ -63,12 +114,14 @@ public class ElementSelector extends Element {
             }
         }
         return "";
-	}
+    }
 
-
-	private boolean hovered(int mouseX, int mouseY) {
-		return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
-	}
+    @Override
+    protected boolean hovered(int mouseX, int mouseY) {
+        return mouseX >= this.x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= this.y + this.height;
+    }
 
 
 }
+
+

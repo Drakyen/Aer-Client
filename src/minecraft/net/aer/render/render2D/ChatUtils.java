@@ -26,15 +26,15 @@ public class ChatUtils {
 	 * Sends a raw message to the chat, with optional colouring, info to apprehend onto "Aer", and whether to delete the previous chat lines from this sender
 	 */
 	public static void sendChatMessage(String string, String colour, String info, boolean delete) {
-		TextComponentString test = new TextComponentString("\\u00A77[\u00A73Aer \\u00A77<" + info + "\\u00A77]" + ": " + colour + string);
-		ITextComponent text = test;
-		if (delete) {
-			clearChat(false, info);
-		}
-		minecraft.player.addChatMessage(text, 0);
+        TextComponentString test = new TextComponentString("\u00A77[\u00A73Aer \u00A77<" + info + "\u00A77]" + ": " + colour + string);
+        ITextComponent text = test;
+        if (delete) {
+            clearChat(false, info);
+        }
+        minecraft.player.addChatMessage(text, 0);
 
 
-	}
+    }
 
 	/**
 	 * Sends a raw message to the chat, with optional colouring, without the "Aer" watermark. Uses a invisible unicode character to identify the chat line.
