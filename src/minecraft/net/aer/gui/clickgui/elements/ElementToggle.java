@@ -1,8 +1,11 @@
 package net.aer.gui.clickgui.elements;
 
+import net.aer.Aer;
 import net.aer.gui.GuiStyle;
 import net.aer.utils.threads.ColourFadeThread;
 import net.aer.utils.valuesystem.Value;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 
 import java.awt.*;
 
@@ -49,12 +52,15 @@ public class ElementToggle extends Element {
 	}
 
 	public void onMouseClicked(int mouseX, int mouseY, int button) {
-        if (button == 0) {
+        if (button == 0 && parent.getParent().getParent().allowAction(parent.getParent(), mouseX, mouseY)) {
             if (hovered(mouseX, mouseY)) {
                 this.toggled = !this.toggled;
                 this.setting.setObject(this.toggled);
                 this.parent.ValueUpdated();
                 fade();
+                if (parent.getParent().getParent().soundMode) {
+                    Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                }
             }
         }
     }

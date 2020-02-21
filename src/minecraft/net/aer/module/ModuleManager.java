@@ -1,6 +1,7 @@
 package net.aer.module;
 
 import net.aer.module.modules.combat.Aura;
+import net.aer.module.modules.exploit.Ultraspeed;
 import net.aer.module.modules.movement.ClickTeleport;
 import net.aer.module.modules.movement.Flight;
 import net.aer.module.modules.movement.Freecam;
@@ -47,20 +48,33 @@ public class ModuleManager {
 	 * Loads all modules into this ModuleManager
 	 */
 	public static void loadModules() {
-		moduleList.add(new Testing());
-		moduleList.add(new ClickGui());
-		moduleList.add(new Flight());
-		moduleList.add(new Freecam());
-		moduleList.add(new NoFall());
-		moduleList.add(new ClickTeleport());
-		moduleList.add(new Brightness());
-		moduleList.add(new Sprint());
-		moduleList.add(new HUD());
-		moduleList.add(new StorageESP());
-		moduleList.add(new Tracers());
-		moduleList.add(new XRay());
-		moduleList.add(new Aura());
-	}
+        //Combat
+        moduleList.add(new Aura());
+        //Movement
+        moduleList.add(new Flight());
+        moduleList.add(new ClickTeleport());
+        moduleList.add(new Sprint());
+        //Render
+        moduleList.add(new Brightness());
+        moduleList.add(new StorageESP());
+        moduleList.add(new Tracers());
+        moduleList.add(new XRay());
+        //World
+
+        //Player
+        moduleList.add(new Freecam());
+        moduleList.add(new NoFall());
+        //Exploit
+        moduleList.add(new Ultraspeed());
+        //Utils
+        moduleList.add(new Testing());
+        moduleList.add(new HUD());
+        moduleList.add(new ClickGui());
+        //Hidden
+
+
+        //
+    }
 
 	/**
 	 * Returns all modules that are active (on)

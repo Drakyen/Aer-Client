@@ -55,7 +55,7 @@ public class ModeValue extends Value<String> {
     @Override
     public void fromProperties(Properties props) {
         this.setObject(props.getProperty(this.getName(), "" + this.getDefault()));
-
+        System.out.println(this.getValue());
     }
 
     public String getValue() {

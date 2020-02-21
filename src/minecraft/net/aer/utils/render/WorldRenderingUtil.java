@@ -1,4 +1,4 @@
-package net.aer.utils.world;
+package net.aer.utils.render;
 
 public class WorldRenderingUtil {
 

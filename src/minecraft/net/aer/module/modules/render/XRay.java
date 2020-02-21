@@ -2,15 +2,14 @@ package net.aer.module.modules.render;
 
 import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventPreTick;
 import net.aer.events.EventRenderBlock;
 import net.aer.events.EventWorldLoaded;
 import net.aer.module.Category;
 import net.aer.module.Module;
+import net.aer.utils.render.WorldRenderingUtil;
 import net.aer.utils.valuesystem.BlockArrayValue;
 import net.aer.utils.valuesystem.ModeValue;
 import net.aer.utils.valuesystem.NumberValue;
-import net.aer.utils.world.WorldRenderingUtil;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
 
@@ -18,25 +17,24 @@ import java.util.ArrayList;
 
 public class XRay extends Module {
 
-	private int occlusion = 50;
-	private NumberValue Opacity = new NumberValue("Opacity", 0.4f, 0f, 1f);
-	private ModeValue presets = new ModeValue("Presets", "Ores", new String[]{"Custom", "Ores", "Valuables", "Useful", "Redstone"});
-	public BlockArrayValue custom = new BlockArrayValue("Custom Blocks", new ArrayList<Block>());
-	private BlockArrayValue valuables;
-	private BlockArrayValue useful;
-	private BlockArrayValue redstone;
-	private float fade = 1f;
-	private String current = presets.getValue();
+    private NumberValue Opacity = new NumberValue("Opacity", 0.4f, 0f, 1f);
+    private ModeValue presets = new ModeValue("Presets", "Ores", new String[]{"Custom", "Ores", "Valuables", "Useful", "Redstone"});
+    public BlockArrayValue custom = new BlockArrayValue("Custom Blocks", new ArrayList<Block>());
+    private BlockArrayValue valuables;
+    private BlockArrayValue useful;
+    private BlockArrayValue redstone;
+    private String current = presets.getValue();
+    int occlusion = 1;
 
 
-	public XRay() {
-		super("XRay", Category.RENDER, "Allows you to see through the ground");
-	}
+    public XRay() {
+        super("XRay", Category.RENDER, "Allows you to see through the ground");
+    }
 
-	public void setup() {
-		ArrayList<Block> temp = new ArrayList<Block>();
+    public void setup() {
+        ArrayList<Block> temp = new ArrayList<Block>();
 
-		temp.add(Block.getBlockById(41));
+        temp.add(Block.getBlockById(41));
 		temp.add(Block.getBlockById(57));
 		temp.add(Block.getBlockById(56));
 		temp.add(Block.getBlockById(133));
@@ -104,59 +102,43 @@ public class XRay extends Module {
 	public void onGuiValueUpdate() {
 		if (current != presets.getValue()) {
 			current = presets.getValue();
-			minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-		}
-	}
+            minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
+        }
+    }
 
-	public void onEnable() {
-		occlusion = minecraft.gameSettings.ambientOcclusion;
-		minecraft.gameSettings.ambientOcclusion = 1;
-		WorldRenderingUtil.setBlocksTransparent(true, true);
-		WorldRenderingUtil.setCulling(false, true);
-		minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
+    public void onEnable() {
+        occlusion = minecraft.gameSettings.ambientOcclusion;
+        minecraft.gameSettings.ambientOcclusion = 1;
+        WorldRenderingUtil.setBlocksTransparent(true, true);
+        WorldRenderingUtil.setCulling(false, true);
+        minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
 
-	}
+    }
 
-	@EventTarget
-	public void onWorldLoad(EventWorldLoaded event) {
-		if (this.active) {
-			this.onEnable();
-		}
-	}
+    public void onDisable() {
+        minecraft.gameSettings.ambientOcclusion = occlusion;
+        WorldRenderingUtil.setBlocksTransparent(false, true);
+        WorldRenderingUtil.setCulling(true, true);
+        minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
 
+    }
 
-	@EventTarget
-	public void onTick(EventPreTick event) {
-		if (fade > Opacity.getValue().floatValue() && this.active) {
-			fade -= 0.05;
-			minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-		} else if (fade < Opacity.getValue().floatValue() && this.active) {
-			if (fade - Opacity.getValue().floatValue() > -0.05) {
-				fade = Opacity.getValue().floatValue();
-			} else {
-				fade += 0.05;
-			}
-			minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-		} else if (fade < 1f && !this.active) {
-			fade += 0.05;
-			minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-		} else if (!this.active) {
-			minecraft.gameSettings.ambientOcclusion = occlusion;
-			EventManager.unregister(this);
-			WorldRenderingUtil.setBlocksTransparent(false, false);
-			WorldRenderingUtil.setCulling(true, false);
-			fade = 1f;
-		}
-	}
+    @EventTarget
+    public void onWorldLoad(EventWorldLoaded event) {
+        if (this.active) {
+            this.onEnable();
+        }
+    }
+
 
 	@EventTarget
 	public void renderBlock(EventRenderBlock event) {
-		if (xrayBlock(event.block)) {
-			event.checkSides = false;
-			return;
-		}
-		event.blockOpacity = fade;
-	}
+        if (xrayBlock(event.block)) {
+            event.checkSides = false;
+            return;
+        }
+        event.blockOpacity = Opacity.getValue().floatValue();
+    }
 
 
 	@Override

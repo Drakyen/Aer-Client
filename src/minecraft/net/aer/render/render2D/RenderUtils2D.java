@@ -9,6 +9,7 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.item.ItemStack;
 import net.minecraft.util.ResourceLocation;
+import org.lwjgl.opengl.GL11;
 
 public class RenderUtils2D {
 
@@ -94,7 +95,7 @@ public class RenderUtils2D {
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
-        GlStateManager.color(f, f1, f2, f3);
+        GL11.glColor4f(f, f1, f2, f3);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
         bufferbuilder.pos((double) left, (double) bottom, 0.0D).endVertex();
         bufferbuilder.pos((double) right, (double) bottom, 0.0D).endVertex();

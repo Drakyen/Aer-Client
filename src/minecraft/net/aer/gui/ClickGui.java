@@ -17,27 +17,29 @@ import org.lwjgl.input.Keyboard;
 import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Properties;
 
 public class ClickGui extends GuiScreen {
 
-	public static ArrayList<Panel> panels;
-	public Properties ClickGuiProps;
-	private GuiStyle style;
+    public static ArrayList<Panel> panels;
+    public static ArrayList<Panel> reversedPanels;
+    public Properties ClickGuiProps;
+    private GuiStyle style;
 
-	private ModuleButton hoveredModule;
+    private ModuleButton hoveredModule;
 
-	public boolean blurMode;
+    public boolean blurMode;
+    public boolean soundMode;
 
-	private boolean isBlurred;
 
-	public ClickGui(GuiStyle styleIn) {
+    public ClickGui(GuiStyle styleIn) {
 
-		style = styleIn;
+        style = styleIn;
 
-		ClickGuiProps = ConfigHandler.loadSettings("ClickGuiProps", new Properties());
+        ClickGuiProps = ConfigHandler.loadSettings("ClickGuiProps", new Properties());
 
-		createPanels(style);
+        createPanels(style);
 
 	}
 
@@ -52,59 +54,44 @@ public class ClickGui extends GuiScreen {
 		for (Panel p : panels) {
 			p.drawScreen(mouseX, mouseY);
 		}
-
-		if (blurMode != isBlurred) {
-			if (blurMode) {
-				if (OpenGlHelper.shadersSupported && mc.getRenderViewEntity() instanceof EntityPlayer) {
-					if (mc.entityRenderer.theShaderGroup != null) {
-						mc.entityRenderer.theShaderGroup.deleteShaderGroup();
-					}
-					mc.entityRenderer.loadShader(new ResourceLocation("shaders/post/blur.json"));
-				}
-				isBlurred = true;
-			} else {
-				if (mc.entityRenderer.theShaderGroup != null) {
-					mc.entityRenderer.theShaderGroup.deleteShaderGroup();
-					mc.entityRenderer.theShaderGroup = null;
-				}
-				isBlurred = false;
-			}
-		}
 	}
 
 	private void createPanels(GuiStyle style) {
 
-		panels = new ArrayList<>();
+        panels = new ArrayList<>();
+        reversedPanels = new ArrayList<>();
 
-		int px;
-		int py;
-		int pyo = 10;
-		boolean panelExtended = false;
+        int px;
+        int py;
+        int pyo = 10;
+        boolean panelExtended;
 
-		for (Category c : Category.values()) {
-			if (c != Category.HIDDEN) {
-				String panelName = c.name().toUpperCase();
-				if (ClickGuiProps.containsKey(panelName + "xPos")) {
-					px = Integer.parseInt(ClickGuiProps.getProperty(panelName + "xPos"));
-				} else {
-					px = 10;
-				}
-				if (ClickGuiProps.containsKey(panelName + "yPos")) {
+        for (Category c : Category.values()) {
+            if (c != Category.HIDDEN) {
+                String panelName = c.name().toUpperCase();
+                if (ClickGuiProps.containsKey(panelName + "xPos")) {
+                    px = Integer.parseInt(ClickGuiProps.getProperty(panelName + "xPos"));
+                } else {
+                    px = 10;
+                }
+                if (ClickGuiProps.containsKey(panelName + "yPos")) {
 					py = Integer.parseInt(ClickGuiProps.getProperty(panelName + "yPos"));
 				} else {
 					py = pyo;
 				}
-				if (ClickGuiProps.containsKey(panelName + "extended")) {
-					panelExtended = Boolean.parseBoolean((ClickGuiProps.getProperty(panelName + "extended")));
-				} else {
-					panelExtended = false;
-				}
-				panels.add(new Panel(px, py, style, panelName, panelExtended, c, this));
+                if (ClickGuiProps.containsKey(panelName + "extended")) {
+                    panelExtended = Boolean.parseBoolean((ClickGuiProps.getProperty(panelName + "extended")));
+                } else {
+                    panelExtended = false;
+                }
+                panels.add(new Panel(px, py, style, panelName, panelExtended, c, this));
 
-				pyo += 50;
-			}
-		}
-	}
+                pyo += 50;
+            }
+        }
+        reversedPanels.addAll(panels);
+        Collections.reverse(reversedPanels);
+    }
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
 		for (Panel p : panels) {
@@ -187,14 +174,26 @@ public class ClickGui extends GuiScreen {
 
 	public void setCol(Color col) {
 		style.setCol(col);
-		for (Panel p : panels) {
-			for (ModuleButton button : p.getModules()) {
-				button.updateCols();
-				for (Element e : button.menuElements) {
-					e.updateCols();
-				}
-			}
-		}
-	}
+        for (Panel p : panels) {
+            for (ModuleButton button : p.getModules()) {
+                button.updateCols();
+                for (Element e : button.menuElements) {
+                    e.updateCols();
+                }
+            }
+        }
+    }
 
+    public boolean allowAction(Panel origin, int mouseX, int mouseY) {
+        for (Panel p : reversedPanels) {
+            if (p == origin) {
+                return true;
+            } else if (p.anythingHovered(mouseX, mouseY)) {
+                return false;
+            }
+        }
+        return true;
+    }
 }
+
+

@@ -1,10 +1,13 @@
 package net.aer.gui.clickgui.elements;
 
+import net.aer.Aer;
 import net.aer.gui.ClickGui;
 import net.aer.gui.GuiStyle;
 import net.aer.module.Category;
 import net.aer.module.Module;
 import net.aer.module.ModuleManager;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 
 import java.util.ArrayList;
 
@@ -63,24 +66,28 @@ public class Panel {
                 offset += button.getOffset();
             }
         }
+        style.drawFinal(x, y + offset + height);
     }
 
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		if (hovered(mouseX, mouseY) && mouseButton == 0) {
-			this.dragging = true;
-			this.xo = x - mouseX;
-			this.yo = y - mouseY;
-		}
-		if (hovered(mouseX, mouseY) && mouseButton == 1) {
-			this.extended = !this.extended;
-		}
-		if (this.extended) {
-			for (ModuleButton em : modules) {
-				em.mouseClicked(mouseX, mouseY, mouseButton);
-			}
-		}
-	}
+        if (hovered(mouseX, mouseY) && mouseButton == 0 && parent.allowAction(this, mouseX, mouseY)) {
+            this.dragging = true;
+            this.xo = x - mouseX;
+            this.yo = y - mouseY;
+        } else if (hovered(mouseX, mouseY) && mouseButton == 1 && parent.allowAction(this, mouseX, mouseY)) {
+            this.extended = !this.extended;
+            if (parent.soundMode) {
+                Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
+        }
+
+        if (this.extended) {
+            for (ModuleButton em : modules) {
+                em.mouseClicked(mouseX, mouseY, mouseButton);
+            }
+        }
+    }
 
 	public void mouseReleased(int mouseX, int mouseY, int state) {
 		this.dragging = false;
@@ -93,14 +100,31 @@ public class Panel {
 
 	public void keyTyped(char typedChar, int keyCode) {
 		if (this.extended) {
-			for (ModuleButton em : modules) {
-				em.keyTyped(typedChar, keyCode);
-			}
-		}
+            for (ModuleButton em : modules) {
+                em.keyTyped(typedChar, keyCode);
+            }
+        }
     }
 
-    private boolean hovered(int mouseX, int mouseY) {
+    public boolean hovered(int mouseX, int mouseY) {
         return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
+    }
+
+    public boolean anythingHovered(int mouseX, int mouseY) {
+        if (hovered(mouseX, mouseY)) {
+            return true;
+        } else
+            for (ModuleButton button : getModules()) {
+                if (button.hovered(mouseX, mouseY)) {
+                    return true;
+                } else
+                    for (Element element : button.menuElements) {
+                        if (element.hovered(mouseX, mouseY)) {
+                            return true;
+                        }
+                    }
+            }
+        return false;
     }
 
     public void scroll(int scroll) {

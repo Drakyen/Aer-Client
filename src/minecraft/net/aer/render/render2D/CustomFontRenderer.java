@@ -245,9 +245,9 @@ public class CustomFontRenderer {
      * @param color The color of the text.
      */
     public void drawStringWithShadow(String text, float x, float y, int color) {
-        GL11.glTranslated(0.5, 0.5, 0);
+        GL11.glTranslated(1, 1, 0);
         renderString(text, x, y, color, true);
-        GL11.glTranslated(-0.5, -0.5, 0);
+        GL11.glTranslated(-1, -1, 0);
         renderString(text, x, y, color, false);
     }
 
@@ -367,8 +367,8 @@ public class CustomFontRenderer {
                     // Sets the color to the provided default
                     GL11.glColor4d(r / multiplier, g / multiplier, b / multiplier, a);
                 }
-                //Sets the colour to a darker version
                 else if (index == 22) {
+                    //Sets the colour to a darker version
                     GL11.glColor4d((r / 1.4) / multiplier, (g / 1.4) / multiplier, (b / 1.4) / multiplier, a);
                 }
             } else {

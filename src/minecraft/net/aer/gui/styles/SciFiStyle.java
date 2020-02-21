@@ -3,8 +3,8 @@ package net.aer.gui.styles;
 import net.aer.gui.GuiStyle;
 import net.aer.gui.clickgui.elements.Panel;
 import net.aer.gui.clickgui.elements.*;
-import net.aer.render.render2D.Fonts;
 import net.aer.render.render2D.RenderUtils2D;
+import net.aer.render.render2D.font.Fonts;
 import net.aer.utils.valuesystem.ModeValue;
 import net.aer.utils.valuesystem.NumberValue;
 import net.aer.utils.valuesystem.Value;
@@ -162,6 +162,11 @@ public class SciFiStyle extends GuiStyle {
         RenderUtils2D.drawCenteredString(Fonts.normal, option.getName(), x + width / 2, y + height / 2, textCol.getRGB(), false);
 
         return option;
+    }
+
+    @Override
+    public void drawFinal(int x, int y) {
+
     }
 
 }

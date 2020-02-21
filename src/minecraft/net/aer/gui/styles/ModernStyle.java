@@ -3,8 +3,8 @@ package net.aer.gui.styles;
 import net.aer.gui.GuiStyle;
 import net.aer.gui.clickgui.elements.Panel;
 import net.aer.gui.clickgui.elements.*;
-import net.aer.render.render2D.Fonts;
 import net.aer.render.render2D.RenderUtils2D;
+import net.aer.render.render2D.font.Fonts;
 import net.aer.utils.valuesystem.Value;
 import org.lwjgl.input.Keyboard;
 
@@ -61,21 +61,21 @@ public class ModernStyle extends GuiStyle {
         RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
 
         if (module.getModule().isActive()) {
-            if (module.hovered) {
-                RenderUtils2D.drawRect(x + 2, y, x + width - 2, y + height, col.darker().darker().getRGB());
+            if (module.hovered && module.getParent().getParent().allowAction(module.getParent(), mouseX, mouseY)) {
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0f, col.darker().darker().darker().getRGB(), col.darker().darker().getRGB());
             } else {
-                RenderUtils2D.drawRect(x + 2, y, x + width - 2, y + height, col.darker().getRGB());
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0f, col.darker().getRGB(), col.darker().darker().getRGB());
             }
             RenderUtils2D.drawString(Fonts.normal, module.getName(), x + 5, y + 5, 0xffffffff, true);
         } else {
-            if (module.hovered) {
-                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().brighter().getRGB(), foregroundCol.brighter().getRGB());
+            if (module.hovered && module.getParent().getParent().allowAction(module.getParent(), mouseX, mouseY)) {
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.darker().getRGB(), foregroundCol.getRGB());
             } else {
-                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.getRGB(), foregroundCol.brighter().getRGB());
+                RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().getRGB(), foregroundCol.getRGB());
             }
             RenderUtils2D.drawString(Fonts.normal, module.getName(), x + 5, y + 5, 0xffaaaaaa, true);
-
         }
+        RenderUtils2D.drawString(Fonts.normal, (module.isExtended() ? "-" : "+"), x + width - 10, y + 5, 0xffffffff, true);
 
         return module;
     }
@@ -89,14 +89,14 @@ public class ModernStyle extends GuiStyle {
 
         RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
 
-        if (option.isHovered()) {
-            RenderUtils2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().brighter().getRGB(), foregroundCol.brighter().getRGB());
+        if (option.isHovered() && option.getParent().getParent().getParent().allowAction(option.getParent().getParent(), mouseX, mouseY)) {
+            RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height - 1, foregroundCol.brighter().getRGB());
         }
 
         if (option.isListening()) {
             RenderUtils2D.drawString(Fonts.normal, "Listening..", x + 5, y + 4, 0xffffffff, false);
         } else {
-            RenderUtils2D.drawString(Fonts.normal, "Keybind \u00A7p[\u00A7r" + (option.getModule().getKeybind() != Keyboard.KEY_ESCAPE ? Keyboard.getKeyName(((ElementKeybinding) option).getModule().getKeybind()) : "NONE") + "\u00A7p]", x + 5, y + 4, 0xffffffff, false);
+            RenderUtils2D.drawString(Fonts.normal, "Keybind \u00A7p[\u00A7r" + (option.getModule().getKeybind() != Keyboard.KEY_ESCAPE ? Keyboard.getKeyName(option.getModule().getKeybind()) : "NONE") + "\u00A7p]", x + 5, y + 4, 0xffffffff, false);
         }
 
 
@@ -112,7 +112,7 @@ public class ModernStyle extends GuiStyle {
 
         RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
 
-        if (option.isHovered()) {
+        if (option.isHovered() && option.getParent().getParent().getParent().allowAction(option.getParent().getParent(), mouseX, mouseY)) {
             RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().darker().getRGB());
         } else {
             RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().getRGB());
@@ -135,7 +135,7 @@ public class ModernStyle extends GuiStyle {
         RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
 
         double stretch = x + (width * percent) - 2 <= x + 2 ? x + 3 : x + (width * percent) - 2;
-        if (option.isHovered()) {
+        if (option.isHovered() && option.getParent().getParent().getParent().allowAction(option.getParent().getParent(), mouseX, mouseY)) {
             RenderUtils2D.drawRect(x + 2, y + 1, (int) stretch, y + height, col.darker().darker().getRGB());
         } else {
             RenderUtils2D.drawRect(x + 2, y + 1, (int) stretch, y + height, col.darker().getRGB());
@@ -155,13 +155,13 @@ public class ModernStyle extends GuiStyle {
         RenderUtils2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
 
         if (option.isToggled()) {
-            if (option.isHovered()) {
+            if (option.isHovered() && option.getParent().getParent().getParent().allowAction(option.getParent().getParent(), mouseX, mouseY)) {
                 RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().darker().getRGB());
             } else {
                 RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, col.darker().getRGB());
             }
         } else {
-            if (option.isHovered()) {
+            if (option.isHovered() && option.getParent().getParent().getParent().allowAction(option.getParent().getParent(), mouseX, mouseY)) {
                 RenderUtils2D.drawRect(x + 2, y + 1, x + width - 2, y + height, foregroundCol.brighter().getRGB());
             }
 
@@ -169,6 +169,11 @@ public class ModernStyle extends GuiStyle {
         RenderUtils2D.drawString(Fonts.normal, option.getName(), x + 5, y + 5, 0xffffffff, true);
 
         return option;
+    }
+
+    @Override
+    public void drawFinal(int x, int y) {
+        RenderUtils2D.drawRect(x, y, x + getModuleWidth(), y + 2, backgroundCol.getRGB());
     }
 
 }

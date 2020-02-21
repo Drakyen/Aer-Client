@@ -1,10 +1,13 @@
 package net.aer.gui.clickgui.elements;
 
+import net.aer.Aer;
 import net.aer.gui.GuiStyle;
 import net.aer.module.Module;
 import net.aer.utils.threads.ColourFadeThread;
 import net.aer.utils.threads.ColourFadeable;
 import net.aer.utils.valuesystem.*;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -62,7 +65,7 @@ public class ModuleButton extends ColourFadeable {
             menuElements.add(new ElementSelector(v, this, style, style.getSelectorMode()));
         }
         if (v instanceof NumberValue) {
-            menuElements.add(new ElementSlider(v, this, style));
+            menuElements.add(new ElementSlider((NumberValue) v, this, style));
         }
 
     }
@@ -107,19 +110,24 @@ public class ModuleButton extends ColourFadeable {
 
 
 	public void mouseClicked(int mouseX, int mouseY, int mouseButton) {
-		if (hovered(mouseX, mouseY) && mouseButton == 0) {
+        if (hovered(mouseX, mouseY) && mouseButton == 0 && parent.getParent().allowAction(parent, mouseX, mouseY)) {
             this.module.toggle();
             currentState = module.isActive();
             fade();
+            if (parent.getParent().soundMode) {
+                Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
+        } else if (hovered(mouseX, mouseY) && mouseButton == 1 && parent.getParent().allowAction(parent, mouseX, mouseY)) {
+            this.extended = !this.extended;
+            if (parent.getParent().soundMode) {
+                Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+            }
         }
-		if (hovered(mouseX, mouseY) && mouseButton == 1) {
-			this.extended = !this.extended;
-		}
-		if (this.extended) {
-			for (Element e : menuElements) {
-				e.onMouseClicked(mouseX, mouseY, mouseButton);
-			}
-		}
+        if (this.extended) {
+            for (Element e : menuElements) {
+                e.onMouseClicked(mouseX, mouseY, mouseButton);
+            }
+        }
 	}
 
 

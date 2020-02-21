@@ -1,7 +1,7 @@
 package net.aer.gui;
 
-import net.aer.render.render2D.Fonts;
 import net.aer.render.render2D.RenderUtils2D;
+import net.aer.render.render2D.font.Fonts;
 import net.aer.utils.world.TimerUtil;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;

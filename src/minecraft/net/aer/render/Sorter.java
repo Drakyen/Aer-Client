@@ -1,7 +1,7 @@
 package net.aer.render;
 
 import net.aer.module.Module;
-import net.aer.render.render2D.Fonts;
+import net.aer.render.render2D.font.Fonts;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Comparator;

@@ -1,8 +1,11 @@
 package net.aer.gui.clickgui.elements;
 
+import net.aer.Aer;
 import net.aer.gui.GuiStyle;
 import net.aer.utils.valuesystem.ModeValue;
 import net.aer.utils.valuesystem.Value;
+import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.init.SoundEvents;
 
 public class ElementSelector extends Element {
 
@@ -35,23 +38,35 @@ public class ElementSelector extends Element {
     }
 
     public void onMouseClicked(int mouseX, int mouseY, int button) {
-        if (extendMode) {
-            if (hovered(mouseX, mouseY)) {
-                this.extended = !this.extended;
-            }
-            if (getHoveredOption(mouseX, mouseY) != "" && this.extended) {
-                this.setting.setObject(getHoveredOption(mouseX, mouseY));
-                this.parent.ValueUpdated();
-            }
-        } else {
-            if (hovered(mouseX, mouseY)) {
-                if (button == 0) {
-                    this.setting.setObject(nextMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
+        if (parent.getParent().getParent().allowAction(parent.getParent(), mouseX, mouseY)) {
+            if (extendMode) {
+                if (hovered(mouseX, mouseY)) {
+                    this.extended = !this.extended;
+                    if (parent.getParent().getParent().soundMode) {
+                        Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
+                } else if (getHoveredOption(mouseX, mouseY) != "" && this.extended) {
+                    this.setting.setObject(getHoveredOption(mouseX, mouseY));
                     this.parent.ValueUpdated();
+                    if (parent.getParent().getParent().soundMode) {
+                        Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                    }
                 }
-                if (button == 1) {
-                    this.setting.setObject(previousMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
-                    this.parent.ValueUpdated();
+            } else {
+                if (hovered(mouseX, mouseY)) {
+                    if (button == 0) {
+                        this.setting.setObject(nextMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
+                        this.parent.ValueUpdated();
+                        if (parent.getParent().getParent().soundMode) {
+                            Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                        }
+                    } else if (button == 1) {
+                        this.setting.setObject(previousMode(((ModeValue) this.setting).getModes(), ((ModeValue) this.setting).getValue()));
+                        this.parent.ValueUpdated();
+                        if (parent.getParent().getParent().soundMode) {
+                            Aer.minecraft.getSoundHandler().playSound(PositionedSoundRecord.getMasterRecord(SoundEvents.UI_BUTTON_CLICK, 1.0F));
+                        }
+                    }
                 }
             }
         }

@@ -70,6 +70,8 @@ public abstract class GuiStyle {
 
     protected abstract Element drawElementToggle(ElementToggle option);
 
+    public abstract void drawFinal(int x, int y);
+
     public int getPanelWidth() {
         return panelWidth;
     }

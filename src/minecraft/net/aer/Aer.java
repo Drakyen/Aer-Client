@@ -5,7 +5,7 @@ import net.aer.gui.ClickGui;
 import net.aer.gui.styles.ModernStyle;
 import net.aer.module.Module;
 import net.aer.module.ModuleManager;
-import net.aer.render.render2D.Fonts;
+import net.aer.render.render2D.font.Fonts;
 import net.aer.utils.config.ConfigHandler;
 import net.aer.utils.exploits.ClipUtil;
 import net.minecraft.client.Minecraft;
