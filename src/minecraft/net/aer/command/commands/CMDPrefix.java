@@ -4,7 +4,7 @@ import net.aer.Aer;
 import net.aer.command.Command;
 import net.aer.render.render2D.ChatColour;
 import net.aer.render.render2D.ChatUtils;
-import org.jetbrains.annotations.NotNull;
+import javax.annotation.Nonnull;
 
 /**
  * A command to change the prefix for commands
@@ -18,7 +18,7 @@ public class CMDPrefix extends Command {
         super("CmdPrefox", "Sets the command prefix", "CmdPrefix [SET] [KEY]");
     }
 
-    public void onCommand(String command, @NotNull String[] args) throws Exception {
+    public void onCommand(String command, @Nonnull String[] args) throws Exception {
         if (args[0].equalsIgnoreCase("set")) {
             if (args[1].isEmpty()) {
                 ChatUtils.sendChatMessage("Invalid prefix. Prefix has not been changed.", ChatColour.red, "CMD", true);
