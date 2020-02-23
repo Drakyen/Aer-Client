@@ -45,10 +45,8 @@ public class Help extends Command {
 				ChatUtils.sendChatMessage("Couldn't find module", ChatColour.lightPurple, "CMD", true);
 			}
 
-		} else if (args[0].isEmpty()) {
-			ChatUtils.sendChatMessage(this.getSyntax(), ChatColour.lightPurple, "CMD", true);
 		} else {
-			throw new Exception();
+			ChatUtils.sendChatMessage(this.getSyntax(), ChatColour.lightPurple, "CMD", true);
 		}
 	}
 

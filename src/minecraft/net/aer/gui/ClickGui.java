@@ -27,13 +27,12 @@ public class ClickGui extends GuiScreen {
     public Properties ClickGuiProps;
     private GuiStyle style;
 
-    private ModuleButton hoveredModule;
-
-    public boolean blurMode;
+	public boolean blurMode;
     public boolean soundMode;
+	private Object hoveredObject;
 
 
-    public ClickGui(GuiStyle styleIn) {
+	public ClickGui(GuiStyle styleIn) {
 
         style = styleIn;
 
@@ -54,6 +53,17 @@ public class ClickGui extends GuiScreen {
 		for (Panel p : panels) {
 			p.drawScreen(mouseX, mouseY);
 		}
+		if(hoveredObject != null){
+			if(hoveredObject instanceof ModuleButton && ((ModuleButton)hoveredObject).hovered(mouseX, mouseY)){
+				style.drawDescription(((ModuleButton) hoveredObject).getModule().getDescription(), mouseX, mouseY);
+			} else
+			if(hoveredObject instanceof Element && ((Element)hoveredObject).hovered(mouseX, mouseY)){
+				//TODO Add element tooltip rendering
+			} else{
+				hoveredObject = null;
+			}
+		}
+
 	}
 
 	private void createPanels(GuiStyle style) {
@@ -156,11 +166,6 @@ public class ClickGui extends GuiScreen {
 		ConfigHandler.saveSettings("ClickGuiProps", ClickGuiProps);
 	}
 
-
-	public void setHoveredModule(ModuleButton moduleButton) {
-		this.hoveredModule = moduleButton;
-	}
-
 	@Override
 	public boolean doesGuiPauseGame() {
 		return false;
@@ -194,6 +199,13 @@ public class ClickGui extends GuiScreen {
         }
         return true;
     }
+
+    public void setHovered(ModuleButton button){
+    	this.hoveredObject = button;
+	}
+	public void setHovered(Element element){
+		this.hoveredObject = element;
+	}
 }
 
 

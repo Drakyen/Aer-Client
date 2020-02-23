@@ -89,7 +89,7 @@ public class ElementSlider extends Element {
     }
 
     @Override
-    protected boolean hovered(int mouseX, int mouseY) {
+    public boolean hovered(int mouseX, int mouseY) {
         return mouseX >= x && mouseX <= this.x + this.width && mouseY >= this.y && mouseY <= y + this.height;
     }
 

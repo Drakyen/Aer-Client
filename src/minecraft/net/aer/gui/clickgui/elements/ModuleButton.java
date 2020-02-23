@@ -6,7 +6,9 @@ import net.aer.module.Module;
 import net.aer.utils.threads.ColourFadeThread;
 import net.aer.utils.threads.ColourFadeable;
 import net.aer.utils.valuesystem.*;
+import net.aer.utils.world.TimerUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.init.SoundEvents;
 
 import java.awt.*;
@@ -28,7 +30,7 @@ public class ModuleButton extends ColourFadeable {
     private int width;
     private int height;
 
-    private int hoverTimer = 0;
+    private TimerUtil.Timer timer = new TimerUtil.Timer();
     private int offset = 0;
     private boolean extended;
 
@@ -90,12 +92,11 @@ public class ModuleButton extends ColourFadeable {
         style.drawModule(this);
 
         if (hovered) {
-            hoverTimer++;
-            if (hoverTimer >= style.getHoverTime()) {
-                style.drawDescription(module.getDescription(), mouseX, mouseY);
+            if (timer.delay(style.getHoverTime())) {
+                parent.getParent().setHovered(this);
             }
         } else {
-            hoverTimer = 0;
+            timer.reset();
         }
 
         this.offset = style.getModuleHeight();

@@ -26,7 +26,6 @@ public class Aer {
 
 		defaults.setProperty("CmdPrefix", ".");
 		settings = ConfigHandler.loadSettings("Aer", defaults);
-
 		Fonts.load();
 		ModuleManager.init();
 		CommandManager.init();

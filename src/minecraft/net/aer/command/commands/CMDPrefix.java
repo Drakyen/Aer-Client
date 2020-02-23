@@ -18,7 +18,7 @@ public class CMDPrefix extends Command {
         super("CmdPrefox", "Sets the command prefix", "CmdPrefix [SET] [KEY]");
     }
 
-    public void onCommand(String command, @Nonnull String[] args) throws Exception {
+    public void onCommand(String command, String[] args) throws Exception {
         if (args[0].equalsIgnoreCase("set")) {
             if (args[1].isEmpty()) {
                 ChatUtils.sendChatMessage("Invalid prefix. Prefix has not been changed.", ChatColour.red, "CMD", true);

@@ -60,7 +60,7 @@ public class RenderUtils2D {
             endX = i;
         }
 
-        drawRect(startX, y, endX + 1, y + 1, color);
+        drawRect(startX, y, endX + 1, y + 1, color, 0f);
     }
 
     public static void drawVerticalLine(int x, int startY, int endY, int color) {
@@ -70,10 +70,14 @@ public class RenderUtils2D {
             endY = i;
         }
 
-        drawRect(x, startY + 1, x + 1, endY, color);
+        drawRect(x, startY + 1, x + 1, endY, color, 0f);
     }
 
     public static void drawRect(double left, double top, double right, double bottom, int color) {
+        drawRect(left, top, right, bottom, color, 0f);
+    }
+
+    public static void drawRect(double left, double top, double right, double bottom, int color, float zLevel) {
         if (left < right) {
             double i = left;
             left = right;
@@ -97,10 +101,10 @@ public class RenderUtils2D {
         GlStateManager.tryBlendFuncSeparate(GlStateManager.SourceFactor.SRC_ALPHA, GlStateManager.DestFactor.ONE_MINUS_SRC_ALPHA, GlStateManager.SourceFactor.ONE, GlStateManager.DestFactor.ZERO);
         GL11.glColor4f(f, f1, f2, f3);
         bufferbuilder.begin(7, DefaultVertexFormats.POSITION);
-        bufferbuilder.pos((double) left, (double) bottom, 0.0D).endVertex();
-        bufferbuilder.pos((double) right, (double) bottom, 0.0D).endVertex();
-        bufferbuilder.pos((double) right, (double) top, 0.0D).endVertex();
-        bufferbuilder.pos((double) left, (double) top, 0.0D).endVertex();
+        bufferbuilder.pos((double) left, (double) bottom, zLevel).endVertex();
+        bufferbuilder.pos((double) right, (double) bottom, zLevel).endVertex();
+        bufferbuilder.pos((double) right, (double) top, zLevel).endVertex();
+        bufferbuilder.pos((double) left, (double) top, zLevel).endVertex();
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();

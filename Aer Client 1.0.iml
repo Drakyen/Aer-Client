@@ -60,5 +60,8 @@
     <orderEntry type="library" name="commons-logging-1.1.3" level="project" />
     <orderEntry type="library" name="commons-compress-1.8.1" level="project" />
     <orderEntry type="library" name="jinput-2.0.5" level="project" />
+    <orderEntry type="library" name="annotations-18.0.0" level="project" />
+    <orderEntry type="library" name="mixin-0.8-javadoc" level="project" />
+    <orderEntry type="library" name="mixin-0.8" level="project" />
   </component>
 </module>

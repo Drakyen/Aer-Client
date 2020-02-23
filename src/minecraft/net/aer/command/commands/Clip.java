@@ -21,11 +21,11 @@ public class Clip extends Command {
         int distanceH = 0;
 
         if (args[0].equalsIgnoreCase("V")) {
-            distanceV = Integer.valueOf(args[1]);
+            distanceV = Integer.parseInt(args[1]);
             Aer.clipUtil.Clip(distanceH, distanceV, true, false);
 
         } else if (args[0].equalsIgnoreCase("H")) {
-            distanceH = Integer.valueOf(args[1]);
+            distanceH = Integer.parseInt(args[1]);
             Aer.clipUtil.Clip(distanceH, distanceV, true, false);
         } else if (args[0].isEmpty()) {
             ChatUtils.sendChatMessage(this.getSyntax(), ChatColour.lightPurple, "CMD", true);

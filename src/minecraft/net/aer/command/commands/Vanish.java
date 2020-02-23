@@ -50,6 +50,7 @@ public class Vanish extends Command {
             players.remove(s);
         }
         ServerData serverdata = minecraft.getCurrentServerData();
+        assert serverdata != null;
         ServerAddress serveraddress = ServerAddress.fromString(serverdata.serverIP);
         minecraft.displayGuiScreen(new VanishGui());
         ChatUtils.sendChatMessage("You should be invisible to:", ChatColour.green, "Vanish", true);
@@ -63,7 +64,7 @@ public class Vanish extends Command {
 
     private void connect(final String ip, final int port) {
 
-        LOGGER.info("Connecting to {}, {}", ip, Integer.valueOf(port));
+        LOGGER.info("Connecting to {}, {}", ip, port);
         (new Thread("Server Connector [AerVanish]") {
             public void run() {
                 InetAddress inetaddress = null;
@@ -75,8 +76,8 @@ public class Vanish extends Command {
                     networkManager.sendPacket(new C00Handshake(ip, port, EnumConnectionState.LOGIN));
                     networkManager.sendPacket(new CPacketLoginStart(minecraft.getSession().getProfile()));
                 } catch (UnknownHostException unknownhostexception) {
-                    LOGGER.error("Couldn't connect to server", (Throwable) unknownhostexception);
-                    minecraft.displayGuiScreen(new GuiDisconnected(null, "connect.failed", new TextComponentTranslation("disconnect.genericReason", new Object[]{"Unknown host"})));
+                    LOGGER.error("Couldn't connect to server", unknownhostexception);
+                    minecraft.displayGuiScreen(new GuiDisconnected(null, "connect.failed", new TextComponentTranslation("disconnect.genericReason", "Unknown host")));
                 } catch (Exception exception) {
                     LOGGER.error("Couldn't connect to server", (Throwable) exception);
                     String s = exception.toString();
@@ -86,7 +87,7 @@ public class Vanish extends Command {
                         s = s.replaceAll(s1, "");
                     }
 
-                    minecraft.displayGuiScreen(new GuiDisconnected(null, "connect.failed", new TextComponentTranslation("disconnect.genericReason", new Object[]{s})));
+                    minecraft.displayGuiScreen(new GuiDisconnected(null, "connect.failed", new TextComponentTranslation("disconnect.genericReason", s)));
                 }
             }
         }).start();

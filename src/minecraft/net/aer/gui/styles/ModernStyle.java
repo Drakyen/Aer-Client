@@ -5,10 +5,12 @@ import net.aer.gui.clickgui.elements.Panel;
 import net.aer.gui.clickgui.elements.*;
 import net.aer.render.render2D.RenderUtils2D;
 import net.aer.render.render2D.font.Fonts;
+import net.aer.utils.render.TextUtils;
 import net.aer.utils.valuesystem.Value;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
+import java.util.ArrayList;
 
 public class ModernStyle extends GuiStyle {
 
@@ -17,7 +19,7 @@ public class ModernStyle extends GuiStyle {
     public Color foregroundCol;
 
     public ModernStyle() {
-        super(90, 15, 90, 15, 90, 15, 20, false);
+        super(90, 15, 90, 15, 90, 15, 700, false);
 
     }
 
@@ -35,7 +37,19 @@ public class ModernStyle extends GuiStyle {
     }
 
     @Override
-    public void drawDescription(String description, int mouseX, int mouseY) {
+    public void drawDescription(String descriptionIn, int mouseX, int mouseY) {
+
+        ArrayList<String> toDraw = TextUtils.splitLines(Fonts.normal, " " + descriptionIn, ' ', getModuleWidth());
+
+        int width = getModuleWidth();
+        int height = 0;
+        int boxHeight = getModuleHeight()*toDraw.size();
+        RenderUtils2D.drawRect(mouseX, mouseY, mouseX - width, mouseY + boxHeight, backgroundCol.getRGB(), 0f);
+        RenderUtils2D.drawGradientRectHoriz(mouseX - width - 2, mouseY, mouseX - width + 1, mouseY + boxHeight,0f, col.darker().getRGB(), col.getRGB());
+        for(String s : toDraw){
+            RenderUtils2D.drawString(Fonts.normal, s, mouseX - width, mouseY + 4 + height, 0xffffffff, false);
+            height += getModuleHeight();
+        }
 
     }
 
