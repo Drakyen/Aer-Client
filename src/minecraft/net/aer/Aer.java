@@ -1,6 +1,7 @@
 package net.aer;
 
 import net.aer.command.CommandManager;
+import net.aer.gui.AerGuiMenu;
 import net.aer.gui.ClickGui;
 import net.aer.gui.styles.ModernStyle;
 import net.aer.module.Module;
@@ -30,6 +31,7 @@ public class Aer {
 		ModuleManager.init();
 		CommandManager.init();
 
+		AerGuiMenu AerGuiMenu = new AerGuiMenu();
 		clickGui = new ClickGui(new ModernStyle());
 
 	}
