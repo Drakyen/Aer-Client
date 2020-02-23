@@ -2,7 +2,7 @@
 
 A custom minecraft client that I decided to opensource since authentication and distribution is hard.
 I believe it's the first free and open source client to have premium features and exploits freely visible and copyable to eveyone.
-e
+
 Feel free to make contribution requests to this project, and use the code in your own projects, provided you follow the license terms.
 
 It's going to get skidded by people, I know full well. But hopefully it will get enough of a reputation for skidding it to not matter.
