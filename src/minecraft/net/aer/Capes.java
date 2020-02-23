@@ -18,7 +18,7 @@ public class Capes {
 
     public static void getCapes(GameProfile gameprofile, Map skinMap, SkinAvailableCallback callback) {
             try {
-                HttpsURLConnection connection = (HttpsURLConnection) new URL("https://github.com/Drakyen/Aer-Client/blob/master/capes.json").openConnection();
+                HttpsURLConnection connection = (HttpsURLConnection) new URL("https://raw.githubusercontent.com/Drakyen/Aer-Client/master/capes.json").openConnection();
                 connection.connect();
                 capesJson = jsonParser.parse(new InputStreamReader(connection.getInputStream())).getAsJsonObject();
             }catch(Exception e) {
