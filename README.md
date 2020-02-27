@@ -16,4 +16,6 @@ In order to prevent breaching the [Minecraft TOS](https://account.mojang.com/doc
 and .json version files for releases. To get around this, at some point in the future (Hopefully soon after I make all my hooks injection based), I will make
 a installer that can inject my source code into a unmodified 1.12.2 version.
 
+You can also join my development discord server [here](https://discord.gg/F8B9WeC)
+
 Hope ya'll enjoy the project!
