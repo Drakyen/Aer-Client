@@ -50,19 +50,21 @@ public class RainbowUtil {
 		return blue;
 	}
 
-	public void reseedColour() {
+	public RainbowUtil reseedColour() {
 		red = (int) MathHelper.clamp(Math.random() * 300, 0, 255);
 		green = (int) MathHelper.clamp(Math.random() * 300, 0, 255);
 		blue = (int) MathHelper.clamp(Math.random() * 300, 0, 255);
+		return  this;
 	}
 
-	public void reseedColour(double seed) {
+	public RainbowUtil reseedColour(double seed) {
 		red = (int) MathHelper.clamp((seed + Math.random() * 300), 0, 255);
 		green = (int) MathHelper.clamp((seed + Math.random() * 300), 0, 255);
 		blue = (int) MathHelper.clamp((seed + Math.random() * 300), 0, 255);
+		return  this;
 	}
 
-	public void cycleColors() {
+	public RainbowUtil cycleColors() {
 		if (red == 0) {
 			redUp = true;
 		}
@@ -101,17 +103,19 @@ public class RainbowUtil {
 		} else {
 			blue--;
 		}
+		return this;
 	}
 
-	public void cycleColoursCustomSpeed() {
+	public RainbowUtil cycleColoursCustomSpeed() {
 		attempt++;
 		if (attempt >= speed) {
 			attempt = 0;
 			cycleColors();
 		}
+		return this;
 	}
 
-	public void cycleColorsRandom() {
+	public RainbowUtil cycleColorsRandom() {
 
 		if (red == 255 || red == 0) {
 
@@ -137,9 +141,10 @@ public class RainbowUtil {
 		} else {
 			blue--;
 		}
+		return  this;
 	}
 
-	public void randomiseDirection() {
+	public RainbowUtil randomiseDirection() {
 		double r = Math.random();
 		if (r < 0.01) {
 			double r1 = Math.random();
@@ -163,9 +168,9 @@ public class RainbowUtil {
 				redUp = false;
 			}
 		} else {
-			return;
+			return this;
 		}
-
+		return this;
 	}
 
 	private boolean getRandBool() {
@@ -181,11 +186,11 @@ public class RainbowUtil {
 		return new Color(red, green, blue);
 	}
 
-	public void reseedColour(Color color) {
+	public RainbowUtil reseedColour(Color color) {
 		this.red = color.getRed();
 		this.green = color.getGreen();
-		this.blue = color.getGreen();
-
+		this.blue = color.getBlue();
+		return this;
 	}
 
 }

@@ -1,11 +1,14 @@
 package net.aer;
 
+import com.darkmagician6.eventapi.EventManager;
+import com.darkmagician6.eventapi.EventTarget;
 import net.aer.command.CommandManager;
+import net.aer.events.input.EventKeyboardInput;
 import net.aer.gui.AerGuiMenu;
 import net.aer.gui.ClickGui;
 import net.aer.gui.styles.ModernStyle;
-import net.aer.module.Module;
-import net.aer.module.ModuleManager;
+import net.aer.module.base.Module;
+import net.aer.module.base.ModuleManager;
 import net.aer.render.render2D.font.Fonts;
 import net.aer.utils.config.ConfigHandler;
 import net.aer.utils.exploits.ClipUtil;
@@ -22,9 +25,10 @@ public class Aer {
 	public static final Minecraft minecraft = Minecraft.getMinecraft();
 	public static final ClipUtil clipUtil = new ClipUtil();
 	public static ClickGui clickGui;
+	public static Aer INSTANCE;
 
-	public static void load() {
-
+	public Aer() {
+		INSTANCE = this;
 		defaults.setProperty("CmdPrefix", ".");
 		settings = ConfigHandler.loadSettings("Aer", defaults);
 		Fonts.load();
@@ -33,7 +37,7 @@ public class Aer {
 
 		AerGuiMenu AerGuiMenu = new AerGuiMenu();
 		clickGui = new ClickGui(new ModernStyle());
-
+		EventManager.register(INSTANCE);
 	}
 
 	public static void shutdown() {
@@ -41,9 +45,10 @@ public class Aer {
 		ModuleManager.onExit();
 	}
 
-	public static void keypress(int key) {
+	@EventTarget
+	public static void keypress(EventKeyboardInput event) {
 		for (Module m : ModuleManager.moduleList) {
-			if (m.getKeybind() == key) {
+			if (m.getKeybind() == event.key) {
 				m.toggle();
 			}
 		}

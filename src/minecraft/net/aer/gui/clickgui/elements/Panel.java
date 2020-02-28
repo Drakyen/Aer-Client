@@ -3,9 +3,9 @@ package net.aer.gui.clickgui.elements;
 import net.aer.Aer;
 import net.aer.gui.ClickGui;
 import net.aer.gui.GuiStyle;
-import net.aer.module.Category;
-import net.aer.module.Module;
-import net.aer.module.ModuleManager;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
+import net.aer.module.base.ModuleManager;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 

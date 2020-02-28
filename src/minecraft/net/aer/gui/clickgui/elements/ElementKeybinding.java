@@ -2,7 +2,7 @@ package net.aer.gui.clickgui.elements;
 
 import net.aer.Aer;
 import net.aer.gui.GuiStyle;
-import net.aer.module.Module;
+import net.aer.module.base.Module;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 import org.lwjgl.input.Keyboard;

@@ -2,10 +2,10 @@ package net.aer.module.modules.render;
 
 import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventRenderBlock;
-import net.aer.events.EventWorldLoaded;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.render.EventRenderBlock;
+import net.aer.events.world.EventWorldLoaded;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.utils.render.WorldRenderingUtil;
 import net.aer.utils.valuesystem.BlockArrayValue;
 import net.aer.utils.valuesystem.ModeValue;

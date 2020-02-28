@@ -1,12 +1,12 @@
 package net.aer.module.modules.movement;
 
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventMouseInput;
-import net.aer.events.EventPostEntityUpdate;
-import net.aer.events.EventPreEntityUpdate;
-import net.aer.events.EventRender3D;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.input.EventMouseInput;
+import net.aer.events.entity.EventPostEntityUpdate;
+import net.aer.events.entity.EventPreEntityUpdate;
+import net.aer.events.render.EventRender3D;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.render.render3D.RenderUtils3D;
 import net.aer.utils.valuesystem.NumberValue;
 import net.minecraft.entity.Entity;

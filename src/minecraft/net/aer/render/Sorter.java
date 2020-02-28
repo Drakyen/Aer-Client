@@ -1,6 +1,6 @@
 package net.aer.render;
 
-import net.aer.module.Module;
+import net.aer.module.base.Module;
 import net.aer.render.render2D.font.Fonts;
 import org.jetbrains.annotations.NotNull;
 

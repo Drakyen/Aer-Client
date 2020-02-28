@@ -1,8 +1,8 @@
 package net.aer.utils.config;
 
 import net.aer.Aer;
-import net.aer.module.Module;
-import net.aer.module.ModuleManager;
+import net.aer.module.base.Module;
+import net.aer.module.base.ModuleManager;
 
 import java.io.File;
 import java.io.FileReader;

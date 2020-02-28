@@ -1,7 +1,7 @@
 package net.aer.module.modules.movement;
 
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 
 public class Speed extends Module {
 

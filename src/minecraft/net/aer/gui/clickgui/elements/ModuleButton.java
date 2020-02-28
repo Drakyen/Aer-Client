@@ -2,13 +2,12 @@ package net.aer.gui.clickgui.elements;
 
 import net.aer.Aer;
 import net.aer.gui.GuiStyle;
-import net.aer.module.Module;
+import net.aer.module.base.Module;
 import net.aer.utils.threads.ColourFadeThread;
 import net.aer.utils.threads.ColourFadeable;
 import net.aer.utils.valuesystem.*;
 import net.aer.utils.world.TimerUtil;
 import net.minecraft.client.audio.PositionedSoundRecord;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.init.SoundEvents;
 
 import java.awt.*;

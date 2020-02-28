@@ -2,10 +2,10 @@ package net.aer.module.modules.util;
 
 import com.darkmagician6.eventapi.EventTarget;
 import net.aer.Aer;
-import net.aer.events.EventRender2D;
-import net.aer.module.Category;
-import net.aer.module.Module;
-import net.aer.module.ModuleManager;
+import net.aer.events.render.EventRender2D;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
+import net.aer.module.base.ModuleManager;
 import net.aer.render.RainbowUtil;
 import net.aer.render.Sorter;
 import net.aer.render.render2D.RenderUtils2D;

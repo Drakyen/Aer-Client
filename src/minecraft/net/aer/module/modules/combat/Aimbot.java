@@ -1,8 +1,8 @@
 package net.aer.module.modules.combat;
 
 import net.aer.Aer;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.monster.EntityMob;

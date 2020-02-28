@@ -11,7 +11,7 @@
 package net.aer.utils.valuesystem;
 
 import com.darkmagician6.eventapi.EventManager;
-import net.aer.events.EventValueChanged;
+import net.aer.events.other.EventValueChanged;
 
 import java.util.Properties;
 import java.util.function.Predicate;

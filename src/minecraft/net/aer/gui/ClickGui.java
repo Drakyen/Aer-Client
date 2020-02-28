@@ -5,7 +5,7 @@ import net.aer.gui.clickgui.elements.Element;
 import net.aer.gui.clickgui.elements.ElementKeybinding;
 import net.aer.gui.clickgui.elements.ModuleButton;
 import net.aer.gui.clickgui.elements.Panel;
-import net.aer.module.Category;
+import net.aer.module.base.Category;
 import net.aer.utils.config.ConfigHandler;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.ScaledResolution;

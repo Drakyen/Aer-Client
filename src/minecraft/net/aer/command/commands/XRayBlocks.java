@@ -3,7 +3,7 @@ package net.aer.command.commands;
 
 import net.aer.Aer;
 import net.aer.command.Command;
-import net.aer.module.ModuleManager;
+import net.aer.module.base.ModuleManager;
 import net.aer.module.modules.render.XRay;
 import net.aer.render.render2D.ChatColour;
 import net.aer.render.render2D.ChatUtils;

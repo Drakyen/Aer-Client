@@ -2,9 +2,9 @@ package net.aer.module.modules.render;
 
 
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventRender3D;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.render.EventRender3D;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.render.render3D.RenderUtils3D;
 import net.aer.utils.valuesystem.BooleanValue;
 import net.aer.utils.valuesystem.NumberValue;

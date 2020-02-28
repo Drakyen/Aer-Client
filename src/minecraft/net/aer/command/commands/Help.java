@@ -2,8 +2,8 @@ package net.aer.command.commands;
 
 import net.aer.command.Command;
 import net.aer.command.CommandManager;
-import net.aer.module.Module;
-import net.aer.module.ModuleManager;
+import net.aer.module.base.Module;
+import net.aer.module.base.ModuleManager;
 import net.aer.render.render2D.ChatColour;
 import net.aer.render.render2D.ChatUtils;
 

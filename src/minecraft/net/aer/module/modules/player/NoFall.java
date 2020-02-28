@@ -1,9 +1,9 @@
 package net.aer.module.modules.player;
 
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventPacketSent;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.net.EventPacketSent;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.utils.valuesystem.ModeValue;
 import net.minecraft.network.play.client.CPacketPlayer;
 

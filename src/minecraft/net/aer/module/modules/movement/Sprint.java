@@ -1,9 +1,9 @@
 package net.aer.module.modules.movement;
 
 import com.darkmagician6.eventapi.EventTarget;
-import net.aer.events.EventPreUpdate;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.world.EventPreUpdate;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 
 
 /**

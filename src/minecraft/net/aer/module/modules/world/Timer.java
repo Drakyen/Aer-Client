@@ -1,7 +1,7 @@
 package net.aer.module.modules.world;
 
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.utils.valuesystem.NumberValue;
 
 public class Timer extends Module {
@@ -11,6 +11,7 @@ public class Timer extends Module {
     public Timer() {
         super("Timer", Category.WORLD, "Changes client tick speed.");
     }
+
 
     @Override
     public void onEnable(){

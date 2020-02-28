@@ -5,19 +5,16 @@ import com.darkmagician6.eventapi.EventTarget;
 import com.google.common.base.Strings;
 import com.google.common.collect.Lists;
 import com.google.common.util.concurrent.Runnables;
-import net.aer.Aer;
-import net.aer.events.EventGuiOpened;
+import net.aer.events.render.EventGuiOpened;
 import net.aer.login.GuiAltLogin;
-import net.aer.render.render2D.RenderUtils2D;
-import net.aer.render.render2D.font.Fonts;
+import net.aer.render.RainbowUtil;
+import net.aer.utils.Utilities;
+import net.aer.utils.world.TimerUtil;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.*;
-import net.minecraft.client.renderer.BufferBuilder;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
-import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.IResource;
 import net.minecraft.client.settings.GameSettings;
@@ -29,8 +26,6 @@ import net.minecraft.util.text.TextFormatting;
 import net.minecraft.world.WorldServerDemo;
 import net.minecraft.world.storage.ISaveFormat;
 import net.minecraft.world.storage.WorldInfo;
-import optifine.CustomPanorama;
-import optifine.CustomPanoramaProperties;
 import optifine.Reflector;
 import org.apache.commons.io.IOUtils;
 import org.apache.logging.log4j.LogManager;
@@ -38,8 +33,8 @@ import org.apache.logging.log4j.Logger;
 import org.lwjgl.input.Mouse;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GLContext;
-import org.lwjgl.util.glu.Project;
 
+import java.awt.*;
 import java.io.BufferedReader;
 import java.io.Closeable;
 import java.io.IOException;
@@ -53,10 +48,12 @@ import java.util.Random;
 
 import static net.aer.Aer.minecraft;
 
-public class AerGuiMenu extends GuiScreen {
+public class AerGuiMenu extends GuiScreen implements Utilities {
 
     private static final Logger LOGGER = LogManager.getLogger();
     private static final Random RANDOM = new Random();
+    private static final RainbowUtil rainbow = new RainbowUtil().reseedColour(new Color(0xFF7A00));
+    private static final TimerUtil.Timer timer = new TimerUtil.Timer();
 
     /** Counts the number of screen updates. */
     private final float updateCounter;
@@ -127,6 +124,7 @@ public class AerGuiMenu extends GuiScreen {
     private int field_193979_N;
     private GuiButton modButton;
     private GuiScreen modUpdateNotification;
+    private int LOGO;
 
     public AerGuiMenu(){
         super();
@@ -134,6 +132,7 @@ public class AerGuiMenu extends GuiScreen {
         this.openGLWarning2 = MORE_INFO_TEXT;
         this.splashText = "missingno";
         IResource iresource = null;
+        LOGO = rend2D.loadTexture("aerassets/logo.png");
 
         try
         {
@@ -403,7 +402,7 @@ public class AerGuiMenu extends GuiScreen {
         Gui.drawModalRectWithCustomSizedTexture(0, 0, 0.0F, 0.0F, scaledRes.getScaledWidth(), scaledRes.getScaledHeight(), scaledRes.getScaledWidth(), scaledRes.getScaledHeight());
         GlStateManager.enableAlpha();
         int i = 274;
-        int j = this.width / 2 - 40;
+        int j = this.width / 2 - 50;
         int k = 30;
         int l = -2130706433;
         int i1 = 16777215;
@@ -411,8 +410,17 @@ public class AerGuiMenu extends GuiScreen {
         int k1 = Integer.MIN_VALUE;
         GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
-        this.mc.getTextureManager().bindTexture(new ResourceLocation("aerassets/logo.png"));
-        drawModalRectWithCustomSizedTexture(j, 30, 0F, 0.0F, 80, 80, 80F, 80F);
+        rainbow.cycleColors();
+        if(timer.delay(1000)){
+            rainbow.cycleColorsRandom();
+            timer.reset();
+        }
+        GL11.glBindTexture(GL11.GL_TEXTURE_2D, LOGO);
+        GL11.glColor4f(1f, 1f,  1f, 1f);
+        rend2D.drawRect(j + 20, (height/16) + 30, j + 80, (height/16) + 70, rainbow.getRGB());
+        rend2D.enableBlending();
+        drawModalRectWithCustomSizedTexture(j, height/16, 0F, 0.0F, 100, 100, 100F, 100F);
+        rend2D.disableBlending();
 
 
         if (Reflector.ForgeHooksClient_renderMainMenu.exists())
@@ -512,8 +520,21 @@ public class AerGuiMenu extends GuiScreen {
 
     @EventTarget
     public void aerMainMenuListener(EventGuiOpened event){
-        if(event.gui instanceof GuiMainMenu){
+        if(event.gui instanceof GuiMainMenu || event.gui == this){
             event.gui = this;
+            double rand = Math.random();
+            if(rand < 0.3){
+                rainbow.reseedColour(new Color(0xff7A00));
+            }
+            else if(rand < 0.6){
+                rainbow.reseedColour(new Color(0x7A00FF));
+            }
+            else if(rand < 0.9){
+                rainbow.reseedColour(new Color(0x00FF7A));
+            }
+            else{
+                rainbow.reseedColour(new Color(0xFF7A7A));
+            }
         }
     }
 }

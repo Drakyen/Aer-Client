@@ -1,7 +1,7 @@
 package net.aer.render.render2D.font;
 
-import net.aer.module.ModuleManager;
-import net.aer.module.Testing;
+import net.aer.module.base.ModuleManager;
+import net.aer.module.modules.Dummy;
 import net.aer.module.modules.util.HUD;
 import net.aer.render.render2D.CustomFontRenderer;
 import org.apache.logging.log4j.LogManager;
@@ -26,7 +26,7 @@ public class Fonts {
     public static CustomFontRenderer createFont(String path, float size, String name) {
         try {
             return new CustomFontRenderer(Font.createFont(
-                    Font.TRUETYPE_FONT, Testing.class.getResourceAsStream(path)).deriveFont(Font.PLAIN, size), false, name);
+                    Font.TRUETYPE_FONT, Dummy.class.getResourceAsStream(path)).deriveFont(Font.PLAIN, size), false, name);
         } catch (FontFormatException e) {
             e.printStackTrace();
         } catch (IOException e) {

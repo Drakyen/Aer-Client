@@ -2,12 +2,12 @@ package net.aer.module.modules.movement;
 
 import com.darkmagician6.eventapi.EventTarget;
 import com.mojang.authlib.GameProfile;
-import net.aer.events.EventPacketSent;
-import net.aer.events.EventPostUpdate;
-import net.aer.events.EventPreEntityUpdate;
-import net.aer.events.EventPreUpdate;
-import net.aer.module.Category;
-import net.aer.module.Module;
+import net.aer.events.net.EventPacketSent;
+import net.aer.events.world.EventPostUpdate;
+import net.aer.events.entity.EventPreEntityUpdate;
+import net.aer.events.world.EventPreUpdate;
+import net.aer.module.base.Category;
+import net.aer.module.base.Module;
 import net.aer.utils.render.WorldRenderingUtil;
 import net.aer.utils.valuesystem.BooleanValue;
 import net.aer.utils.valuesystem.NumberValue;
