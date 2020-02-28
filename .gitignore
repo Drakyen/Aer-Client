@@ -27,5 +27,6 @@ hs_err_pid*
 
 #enviroment files
 /.idea/
+*.iml
 #fonts
 *.ttf
