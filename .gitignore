@@ -30,3 +30,6 @@ hs_err_pid*
 *.iml
 #fonts
 *.ttf
+/options.txt
+/optionsof.txt
+/usercache.json
