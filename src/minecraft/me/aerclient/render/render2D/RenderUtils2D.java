@@ -47,7 +47,7 @@ public class RenderUtils2D implements Utilities {
         this.factor = 0.5f;
     }
 
-    public static void drawString(CustomFontRenderer renderer, String text, float x, float y, int colour, boolean shadow) {
+    public void drawString(CustomFontRenderer renderer, String text, float x, float y, int colour, boolean shadow) {
         if (shadow) {
             renderer.drawStringWithShadow(text, Math.round(x), Math.round(y), colour);
         } else {
@@ -55,7 +55,7 @@ public class RenderUtils2D implements Utilities {
         }
     }
 
-    public static void drawCenteredString(CustomFontRenderer renderer, String text, float x, float y, int colour, boolean shadow) {
+    public void drawCenteredString(CustomFontRenderer renderer, String text, float x, float y, int colour, boolean shadow) {
         x -= Math.round(renderer.getStringWidth(text) / 2);
         y -= Math.round(renderer.getStringHeight(text) / 2);
         if (shadow) {
@@ -74,7 +74,7 @@ public class RenderUtils2D implements Utilities {
         drawCenteredString(renderer, text, x1, y1, colour, shadow);
     }
 
-    public static void drawHorizontalLine(int startX, int endX, int y, int color) {
+    public void drawHorizontalLine(int startX, int endX, int y, int color) {
         if (endX < startX) {
             int i = startX;
             startX = endX;
@@ -84,7 +84,7 @@ public class RenderUtils2D implements Utilities {
         drawRect(startX, y, endX + 1, y + 1, color, 0f);
     }
 
-    public static void drawVerticalLine(int x, int startY, int endY, int color) {
+    public void drawVerticalLine(int x, int startY, int endY, int color) {
         if (endY < startY) {
             int i = startY;
             startY = endY;
@@ -94,11 +94,11 @@ public class RenderUtils2D implements Utilities {
         drawRect(x, startY + 1, x + 1, endY, color, 0f);
     }
 
-    public static void drawRect(double left, double top, double right, double bottom, int color) {
+    public void drawRect(double left, double top, double right, double bottom, int color) {
         drawRect(left, top, right, bottom, color, 0f);
     }
 
-    public static void drawRect(double left, double top, double right, double bottom, int color, float zLevel) {
+    public void drawRect(double left, double top, double right, double bottom, int color, float zLevel) {
         if (left < right) {
             double i = left;
             left = right;
@@ -129,9 +129,10 @@ public class RenderUtils2D implements Utilities {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
-    public static void drawSquare(double x, double y, double size, int color) {
+    public void drawSquare(double x, double y, double size, int color) {
         double left = x - (size / 2);
         double right = x + (size / 2);
         double top = y - (size / 2);
@@ -167,9 +168,10 @@ public class RenderUtils2D implements Utilities {
         tessellator.draw();
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
-    public static void drawGradientRectVert(int left, int top, int right, int bottom, float zLevel, int startColor, int endColor) {
+    public void drawGradientRectVert(int left, int top, int right, int bottom, float zLevel, int startColor, int endColor) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;
@@ -195,9 +197,10 @@ public class RenderUtils2D implements Utilities {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
-    public static void drawGradientRectHoriz(int left, int top, int right, int bottom, float zLevel, int startColor, int endColor) {
+    public void drawGradientRectHoriz(int left, int top, int right, int bottom, float zLevel, int startColor, int endColor) {
         float f = (float) (startColor >> 24 & 255) / 255.0F;
         float f1 = (float) (startColor >> 16 & 255) / 255.0F;
         float f2 = (float) (startColor >> 8 & 255) / 255.0F;
@@ -223,10 +226,11 @@ public class RenderUtils2D implements Utilities {
         GlStateManager.disableBlend();
         GlStateManager.enableAlpha();
         GlStateManager.enableTexture2D();
+        GL11.glColor4f(1f, 1f, 1f, 1f);
     }
 
 
-    public static void drawScaledCustomTexture(String texturePath, int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight) {
+    public void drawScaledCustomTexture(String texturePath, int x, int y, float u, float v, int width, int height, float textureWidth, float textureHeight) {
         minecraft.getTextureManager().bindTexture(new ResourceLocation(texturePath));
         float f = 1.0F / textureWidth;
         float f1 = 1.0F / textureHeight;
@@ -241,7 +245,7 @@ public class RenderUtils2D implements Utilities {
     }
 
 
-    public static void drawScaledCustomTexture(String texturePath, int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
+    public void drawScaledCustomTexture(String texturePath, int x, int y, float u, float v, int uWidth, int vHeight, int width, int height, float tileWidth, float tileHeight) {
         minecraft.getTextureManager().bindTexture(new ResourceLocation(texturePath));
         float f = 1.0F / tileWidth;
         float f1 = 1.0F / tileHeight;
@@ -413,7 +417,6 @@ public class RenderUtils2D implements Utilities {
         iRend.renderItemOverlays(minecraft.fontRendererObj, stack, xPos + 2, yPos + 2);
         minecraft.getTextureManager().bindTexture(minecraft.fontRendererObj.locationFontTexture);
         minecraft.getRenderItem().zLevel = 0.0F;
-        this.disableDepth();
         RenderHelper.disableStandardItemLighting();
         GlStateManager.popMatrix();
     }

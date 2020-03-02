@@ -90,7 +90,7 @@ public class HUD extends Module {
 			if (netherCoords.getObject()) {
 				if (showYpos.getObject()) {
 					if (minecraft.player.dimension == 0) {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                         + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ - 0.5) + " \u00a7p[\u00a7r"
                                         + df2.format(minecraft.player.posX / 8 - 0.5)
@@ -99,7 +99,7 @@ public class HUD extends Module {
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
                         );
 					} else {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX * 8 - 0.5)
                                         + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ * 8 - 0.5) + " \u00a7p[\u00a7r"
                                         + df2.format(minecraft.player.posX - 0.5)
@@ -110,7 +110,7 @@ public class HUD extends Module {
 					}
 				} else {
 					if (minecraft.player.dimension != -1) {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                         + " " + df2.format(minecraft.player.posZ - 0.5) + " \u00a7p[\u00a7r"
                                         + df2.format(minecraft.player.posX / 8 - 0.5)
@@ -119,7 +119,7 @@ public class HUD extends Module {
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
                         );
 					} else {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX * 8 - 0.5)
                                         + " " + df2.format(minecraft.player.posZ * 8 - 0.5) + " \u00a7p[\u00a7r"
                                         + df2.format(minecraft.player.posX - 0.5)
@@ -132,13 +132,13 @@ public class HUD extends Module {
 			} else {
 				if (showYpos.getObject()) {
 					if (minecraft.player.dimension == -1) {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX * 8 - 0.5)
                                         + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ * 8 - 0.5) + " \u00a7p[\u00a7rOverworld\u00a7p]",
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
                         );
 					} else {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                         + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ - 0.5),
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
@@ -146,13 +146,13 @@ public class HUD extends Module {
 					}
 				} else {
 					if (minecraft.player.dimension == -1) {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX * 8 - 0.5)
                                         + " " + df2.format(minecraft.player.posZ * 8 - 0.5) + " \u00a7p[\u00a7rOverworld\u00a7p]",
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
                         );
 					} else {
-						RenderUtils2D.drawString(
+						rend2D.drawString(
                                 Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                         + " " + df2.format(minecraft.player.posZ - 0.5),
                                 5f, (float) scaledRes.getScaledHeight() - 18, col, true
@@ -163,13 +163,13 @@ public class HUD extends Module {
 		} else if (netherCoords.getObject()) {
 			if (showYpos.getObject()) {
 				if (minecraft.player.dimension == -1) {
-					RenderUtils2D.drawString(
+					rend2D.drawString(
                             Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                     + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ - 0.5),
                             5f, (float) scaledRes.getScaledHeight() - 18, col, true
                     );
 				} else {
-					RenderUtils2D.drawString(
+					rend2D.drawString(
                             Fonts.big, "\u00a7pXYZ: \u00a7r" + df2.format(minecraft.player.posX / 8 - 0.5)
                                     + " " + df2.format(minecraft.player.posY) + " " + df2.format(minecraft.player.posZ / 8 - 0.5) + " \u00a7p[\u00a7rNether\u00a7p]",
                             5f, (float) scaledRes.getScaledHeight() - 18, col, true
@@ -177,13 +177,13 @@ public class HUD extends Module {
 				}
 			} else {
 				if (minecraft.player.dimension == -1) {
-					RenderUtils2D.drawString(
+					rend2D.drawString(
                             Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX - 0.5)
                                     + " " + df2.format(minecraft.player.posZ - 0.5),
                             5f, (float) scaledRes.getScaledHeight() - 18, col, true
                     );
 				} else {
-					RenderUtils2D.drawString(
+					rend2D.drawString(
                             Fonts.big, "\u00a7pXZ: \u00a7r" + df2.format(minecraft.player.posX / 8 - 0.5)
                                     + " " + df2.format(minecraft.player.posZ / 8 - 0.5) + " \u00a7p[\u00a7rNether\u00a7p]",
                             5f, (float) scaledRes.getScaledHeight() - 18, col, true
@@ -194,9 +194,9 @@ public class HUD extends Module {
 
 		if (direction.getObject()) {
 			if (coords.getObject() || netherCoords.getObject()) {
-                RenderUtils2D.drawString(Fonts.big, PlayerUtil.direction3(minecraft.player), 5f, (float) scaledRes.getScaledHeight() - 18 - 15, col, true);
+                rend2D.drawString(Fonts.big, PlayerUtil.direction3(minecraft.player), 5f, (float) scaledRes.getScaledHeight() - 18 - 15, col, true);
             } else {
-                RenderUtils2D.drawString(Fonts.big, PlayerUtil.direction3(minecraft.player), 5f, (float) scaledRes.getScaledHeight() - 18, col, true);
+                rend2D.drawString(Fonts.big, PlayerUtil.direction3(minecraft.player), 5f, (float) scaledRes.getScaledHeight() - 18, col, true);
             }
 		}
 
@@ -248,9 +248,9 @@ public class HUD extends Module {
                 }
 
 
-                RenderUtils2D.drawGradientRectHoriz(res.getScaledWidth() - animateX + 1, y + offset, (int) (res.getScaledWidth() + Fonts.mid.getStringWidth(m.getName()) - animateX + 2), y + offset + 12, 100f, darkcol, 0x99777777);
-                RenderUtils2D.drawVerticalLine(res.getScaledWidth() - animateX, y + offset - 1, y + offset + 12, lightcol);
-                RenderUtils2D.drawString(Fonts.mid, m.getName(), res.getScaledWidth() - animateX + 1, y + offset + 1, col, true);
+                rend2D.drawGradientRectHoriz(res.getScaledWidth() - animateX + 1, y + offset, (int) (res.getScaledWidth() + Fonts.mid.getStringWidth(m.getName()) - animateX + 2), y + offset + 12, 100f, darkcol, 0x99777777);
+                rend2D.drawVerticalLine(res.getScaledWidth() - animateX, y + offset - 1, y + offset + 12, lightcol);
+                rend2D.drawString(Fonts.mid, m.getName(), res.getScaledWidth() - animateX + 1, y + offset + 1, col, true);
 
                 if (animateX != 0) {
                     offset += 12;

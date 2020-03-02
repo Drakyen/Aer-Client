@@ -5,10 +5,12 @@ import me.aerclient.injection.events.client.EventValueChanged;
 import me.aerclient.module.base.Category;
 import me.aerclient.module.base.Module;
 import me.aerclient.config.valuesystem.NumberValue;
+import me.aerclient.utils.world.TimerUtil;
 
 public class Timer extends Module {
 
-    private NumberValue<Float> timer = new NumberValue<>("Speed", 1.0F, 1F, 10.0F, false);
+    private NumberValue<Float> speed = new NumberValue<>("Speed", 1.0F, 1F, 10.0F, false);
+    private TimerUtil.Timer timer = new TimerUtil.Timer();
 
     public Timer() {
         super("Timer", Category.WORLD, "Changes client tick speed (TPS)");
@@ -17,12 +19,15 @@ public class Timer extends Module {
 
     @Override
     public void onEnable(){
-        minecraft.timer = new net.minecraft.util.Timer(timer.getValue()*20);
+        minecraft.timer = new net.minecraft.util.Timer(speed.getValue()*20);
     }
 
     @EventTarget
-    public void onValueUpdate(EventValueChanged event){
-        minecraft.timer = new net.minecraft.util.Timer(timer.getValue()*20);
+    public void onValueUpdate(EventValueChanged event) {
+        if(timer.delay(150)) {
+            minecraft.timer = new net.minecraft.util.Timer(speed.getValue() * 20);
+            timer.reset();
+        }
     }
 
     @Override

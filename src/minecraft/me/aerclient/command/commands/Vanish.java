@@ -6,7 +6,7 @@ import me.aerclient.Aer;
 import me.aerclient.command.Command;
 import me.aerclient.injection.events.render.EventGuiOpened;
 import me.aerclient.injection.events.net.EventPacketRecieved;
-import me.aerclient.gui.VanishGui;
+import me.aerclient.gui.screen.VanishGui;
 import me.aerclient.render.render2D.ChatColour;
 import me.aerclient.render.render2D.ChatUtils;
 import me.aerclient.utils.world.WorldUtils;

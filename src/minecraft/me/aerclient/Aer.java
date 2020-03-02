@@ -5,15 +5,13 @@ import com.darkmagician6.eventapi.EventTarget;
 import me.aerclient.command.CommandManager;
 import me.aerclient.injection.events.client.EventGameExit;
 import me.aerclient.injection.events.input.EventKeyboardInput;
-import me.aerclient.gui.AerGuiMenu;
-import me.aerclient.gui.ClickGui;
-import me.aerclient.gui.styles.ModernStyle;
+import me.aerclient.gui.screen.AerGuiMenu;
 import me.aerclient.module.base.Module;
 import me.aerclient.module.base.ModuleManager;
 import me.aerclient.render.render2D.font.Fonts;
 import me.aerclient.config.ConfigHandler;
-import me.aerclient.utils.exploits.ClipUtil;
-import net.minecraft.client.Minecraft;
+import me.aerclient.style.modern.ModernStyle;
+import me.aerclient.gui.click.ClickGuiUI;
 
 import java.util.Properties;
 
@@ -23,7 +21,7 @@ public class Aer {
 	public static final String clientVersion = "1.0 Beta";
 	public static Properties defaults = new Properties();
 	public static Properties settings;
-	public static ClickGui clickGui;
+	public static ClickGuiUI clickGui;
 	public static Aer INSTANCE;
 
 	public Aer() {
@@ -35,7 +33,7 @@ public class Aer {
 		CommandManager.init();
 
 		AerGuiMenu AerGuiMenu = new AerGuiMenu();
-		clickGui = new ClickGui(new ModernStyle());
+		clickGui = new ClickGuiUI(new ModernStyle("ModernStyle"));
 		EventManager.register(INSTANCE);
 	}
 
