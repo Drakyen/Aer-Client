@@ -1,8 +1,8 @@
 package me.aerclient.config;
 
 import me.aerclient.Aer;
-import me.aerclient.module.base.Module;
-import me.aerclient.module.base.ModuleManager;
+import me.aerclient.implementation.module.base.Module;
+import me.aerclient.implementation.module.base.ModuleManager;
 
 import java.io.File;
 import java.io.FileReader;
