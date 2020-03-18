@@ -1,14 +1,14 @@
 package me.aerclient.implementation.module.modules.movement;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.input.EventMouseInput;
-import me.aerclient.injection.events.entity.EventPostEntityUpdate;
-import me.aerclient.injection.events.entity.EventPreEntityUpdate;
-import me.aerclient.injection.events.render.EventRenderWorld;
+import me.aerclient.config.valuesystem.NumberValue;
 import me.aerclient.implementation.module.base.Category;
 import me.aerclient.implementation.module.base.Module;
+import me.aerclient.injection.events.entity.EventPostEntityUpdate;
+import me.aerclient.injection.events.entity.EventPreEntityUpdate;
+import me.aerclient.injection.events.input.EventMouseInput;
+import me.aerclient.injection.events.render.EventRenderWorld;
 import me.aerclient.visual.render.render3D.RenderUtils3D;
-import me.aerclient.config.valuesystem.NumberValue;
 import net.minecraft.entity.Entity;
 import net.minecraft.item.ItemAir;
 import net.minecraft.item.ItemStack;
@@ -22,30 +22,21 @@ import net.minecraft.util.math.RayTraceResult;
 public class ClickTeleport extends Module {
 
 
-	private NumberValue red = new NumberValue("Red", 0f, 0f, 1f, true);
-	private NumberValue green = new NumberValue("Green", 0.6f, 0f, 1f, true);
-	private NumberValue blue = new NumberValue("Blue", 0.4f, 0f, 1f, true);
-	private NumberValue alpha = new NumberValue("Alpha", 0.4f, 0f, 1f, true);
-	private double X = 0;
-	private double Y = 0;
-	private double Z = 0;
-	private double XBlk = 0;
-	private double YBlk = 0;
-	private double ZBlk = 0;
-	private double Time = 0;
-	private boolean veiwBobbing;
-	private BlockPos check;
-	private BlockPos prevCheck;
-	private int teleportDistance = 150;
-	private int teleportKey = 2;
-	private boolean run = false;
-	ItemStack stackHeld;
+    private NumberValue<Float> red = new NumberValue<>("Red", "Red component of the outline box", 0f, 0f, 1f, true);
+    private NumberValue<Float> green = new NumberValue<>("Green", "Green component of the outline box", 0.6f, 0f, 1f, true);
+    private NumberValue<Float> blue = new NumberValue<>("Blue", "Blue component of the outline box", 0.4f, 0f, 1f, true);
+    private NumberValue<Float> alpha = new NumberValue<>("Alpha", "Alpha/Transparency component of the outline box", 0.4f, 0f, 1f, true);
+    private boolean viewBobbing;
+    private BlockPos check;
+    private BlockPos prevCheck;
+    private int teleportDistance = 150;
+    private boolean run = false;
 
-	/**
-	 * Constructor for ClickTeleport
-	 */
-	public ClickTeleport() {
-		super("ClickTeleport", Category.MOVEMENT, "Allows you to teleport to wherever you look");
+    /**
+     * Constructor for ClickTeleport
+     */
+    public ClickTeleport() {
+        super("ClickTeleport", Category.MOVEMENT, "Allows you to teleport to wherever you look");
 	}
 
 	@EventTarget
@@ -58,7 +49,6 @@ public class ClickTeleport extends Module {
 		}
 		if (minecraft.world == null || minecraft.player == null) {
 			run = false;
-			return;
 		} else {
 			ItemStack stackHeld = minecraft.player.inventory.getCurrentItem();
 			if ((stackHeld.getItem() instanceof ItemAir || stackHeld.getItem() instanceof ItemSword) && Key == 1) {
@@ -70,85 +60,82 @@ public class ClickTeleport extends Module {
 
 	public void onEnable() {
 		if (minecraft.getRenderManager().options != null) {
-			veiwBobbing = minecraft.getRenderManager().options.viewBobbing;
-			minecraft.getRenderManager().options.viewBobbing = false;
+            viewBobbing = minecraft.getRenderManager().options.viewBobbing;
+            minecraft.getRenderManager().options.viewBobbing = false;
 		}
 	}
 
 
 	public void onDisable() {
-		if (minecraft.getRenderManager().options != null) {
-			minecraft.getRenderManager().options.viewBobbing = veiwBobbing;
-		}
-		if (minecraft.world == null || minecraft.player == null) {
-			return;
-		}
-		Entity local = minecraft.player;
-		if (local != null) {
-			local.noClip = false;
-			local.onGround = true;
-			local.fallDistance = 0f;
-		}
+        if (minecraft.getRenderManager().options != null) {
+            minecraft.getRenderManager().options.viewBobbing = viewBobbing;
+        }
+        if (minecraft.world == null || minecraft.player == null) {
+            return;
+        }
+        Entity local = minecraft.player;
+        local.noClip = false;
+        local.onGround = true;
+        local.fallDistance = 0f;
 	}
 
 	@EventTarget
 	public void preEntityUpdate(EventPreEntityUpdate event) {
-		if (minecraft.world == null || minecraft.player == null) {
-			return;
-		}
-		RayTraceResult block = minecraft.player.rayTrace(teleportDistance, 0);
-		BlockPos pos = block.getBlockPos();
+        if (minecraft.world == null || minecraft.player == null) {
+            return;
+        }
+        RayTraceResult block = minecraft.player.rayTrace(teleportDistance, 0);
+        BlockPos pos = block.getBlockPos();
 
-		if (minecraft.world.isAirBlock(pos) == true) {
-			check = null;
-			run = false;
-			return;
-		}
-		XBlk = pos.getX();
-		YBlk = pos.getY();
-		ZBlk = pos.getZ();
-		check = new BlockPos(XBlk, YBlk, ZBlk);
+        if (minecraft.world.isAirBlock(pos)) {
+            check = null;
+            run = false;
+            return;
+        }
+        double XBlk = pos.getX();
+        double YBlk = pos.getY();
+        double ZBlk = pos.getZ();
+        check = new BlockPos(XBlk, YBlk, ZBlk);
 
-		while (minecraft.world.isAirBlock(check) == false || minecraft.world.isAirBlock(prevCheck) == false) {
-			YBlk++;
-			check = new BlockPos(XBlk, YBlk, ZBlk);
-			prevCheck = new BlockPos(XBlk, YBlk - 1, ZBlk);
-		}
+        while (!minecraft.world.isAirBlock(check) || !minecraft.world.isAirBlock(prevCheck)) {
+            YBlk++;
+            check = new BlockPos(XBlk, YBlk, ZBlk);
+            prevCheck = new BlockPos(XBlk, YBlk - 1, ZBlk);
+        }
 
-		if (run == true) {
-			Y = YBlk - minecraft.player.posY - 1;
-			X = XBlk - minecraft.player.posX;
-			Z = ZBlk - minecraft.player.posZ;
-			X = X + 0.5;
-			Z = Z + 0.5;
-			minecraft.player.setVelocity(X, Y, Z);
-			minecraft.player.onGround = true;
-			minecraft.player.noClip = true;
-			minecraft.player.fallDistance = 0f;
-		}
+        if (run) {
+            double y = YBlk - minecraft.player.posY - 1;
+            double x = XBlk - minecraft.player.posX;
+            double z = ZBlk - minecraft.player.posZ;
+            x = x + 0.5;
+            z = z + 0.5;
+            minecraft.player.setVelocity(x, y, z);
+            minecraft.player.onGround = true;
+            minecraft.player.noClip = true;
+            minecraft.player.fallDistance = 0f;
+        }
 	}
 
 	@EventTarget
 	public void postEntityUpdate(EventPostEntityUpdate event) {
-		if (minecraft.world == null || minecraft.player == null) {
-			return;
-		}
-		ItemStack stackHeld = minecraft.player.inventory.getCurrentItem();
-		if (run == true) {
-			minecraft.player.motionY -= minecraft.player.motionY;
-			minecraft.player.motionX -= minecraft.player.motionX;
-			minecraft.player.motionZ -= minecraft.player.motionZ;
-			run = false;
-		}
+        if (minecraft.world == null || minecraft.player == null) {
+            return;
+        }
+        if (run) {
+            minecraft.player.motionY -= minecraft.player.motionY;
+            minecraft.player.motionX -= minecraft.player.motionX;
+            minecraft.player.motionZ -= minecraft.player.motionZ;
+            run = false;
+        }
 	}
 
 	@EventTarget
 	public void render3D(EventRenderWorld event) {
-		if (minecraft.world == null || minecraft.player == null || check == null) {
-			return;
-		}
-		BlockPos blockIn = new BlockPos(check.getX(), (prevCheck.getY() - 1), check.getZ());
-		RenderUtils3D.drawBlockESP(blockIn, red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue(), alpha.getValue().floatValue(), red.getValue().floatValue(), green.getValue().floatValue(), green.getValue().floatValue(), alpha.getValue().floatValue(), 2f);
+        if (minecraft.world == null || minecraft.player == null || check == null) {
+            return;
+        }
+        BlockPos blockIn = new BlockPos(check.getX(), (prevCheck.getY() - 1), check.getZ());
+        RenderUtils3D.drawBlockESP(blockIn, red.getValue(), green.getValue(), blue.getValue(), alpha.getValue(), red.getValue(), green.getValue(), green.getValue(), alpha.getValue(), 2f);
 	}
 
 }

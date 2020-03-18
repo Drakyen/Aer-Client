@@ -14,13 +14,12 @@ import com.darkmagician6.eventapi.EventManager;
 import me.aerclient.injection.events.client.EventValueChanged;
 
 import java.util.Properties;
-import java.util.function.Predicate;
 
 public class ModeValue extends Value<String> {
     private String[] modes;
 
-    public ModeValue(String name, String defaultVal, String... modes) {
-        super(name, defaultVal);
+    public ModeValue(String name, String description, String defaultVal, String... modes) {
+        super(name, description, defaultVal);
         this.modes = modes;
 
         setObject(defaultVal);
@@ -58,6 +57,6 @@ public class ModeValue extends Value<String> {
     }
 
     public String getValue() {
-        return (String) getObject();
+        return getObject();
     }
 }

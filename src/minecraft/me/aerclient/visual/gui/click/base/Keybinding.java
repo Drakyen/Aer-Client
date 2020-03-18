@@ -34,8 +34,17 @@ public abstract class Keybinding extends Element {
         }
     }
 
-    public boolean isListening(){
+    public boolean isListening() {
         return listening;
     }
 
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int button) {
+
+    }
 }

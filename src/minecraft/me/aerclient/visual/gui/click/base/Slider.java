@@ -29,6 +29,28 @@ public abstract class Slider extends Element<NumberValue> {
 
     @Override
     public void render(int mouseX, int mouseY) {
+        super.render(mouseX, mouseY);
+        logic(mouseX, mouseY);
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int button) {
+        this.dragging = false;
+    }
+
+    public boolean isDragging() {
+        return dragging;
+    }
+
+    public double getValue() {
+        return value.getValue().doubleValue();
+    }
+
+    public double getPercent() {
+        return percent;
+    }
+
+    public void logic(int mouseX, int mouseY) {
         if (isDragging()) {
             if (value.getDefault() instanceof Double) {
                 double diff = value.getMax().doubleValue() - value.getMin().doubleValue();
@@ -49,23 +71,15 @@ public abstract class Slider extends Element<NumberValue> {
             }
         }
         percent = Math.min((value.getValue().doubleValue() - value.getMin().doubleValue()) / (this.value.getMax().doubleValue() - value.getMin().doubleValue()), 1D);
+    }
+
+    @Override
+    public void init() {
 
     }
 
     @Override
-    public void mouseReleased(int mouseX, int mouseY, int button) {
-        this.dragging = false;
-    }
+    public void keyPressed(int key) {
 
-    public boolean isDragging() {
-        return dragging;
-    }
-
-    public double getValue() {
-        return value.getValue().doubleValue();
-    }
-
-    public double getPercent() {
-        return percent;
     }
 }

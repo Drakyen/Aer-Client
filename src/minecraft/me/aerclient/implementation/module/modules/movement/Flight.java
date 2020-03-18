@@ -1,48 +1,45 @@
 package me.aerclient.implementation.module.modules.movement;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.entity.EventPreEntityUpdate;
-import me.aerclient.injection.events.world.EventPreUpdate;
-import me.aerclient.implementation.module.base.Category;
-import me.aerclient.implementation.module.base.Module;
 import me.aerclient.config.valuesystem.BooleanValue;
 import me.aerclient.config.valuesystem.ModeValue;
 import me.aerclient.config.valuesystem.NumberValue;
+import me.aerclient.implementation.module.base.Category;
+import me.aerclient.implementation.module.base.Module;
 import me.aerclient.implementation.utils.world.TimerUtil;
+import me.aerclient.injection.events.entity.EventPreEntityUpdate;
+import me.aerclient.injection.events.world.EventPreUpdate;
 import net.minecraft.network.play.client.CPacketPlayer;
 import net.minecraft.util.math.AxisAlignedBB;
 
 public class Flight extends Module {
 
-	private NumberValue Speed = new NumberValue("Speed", 0.5f, 0f, 10f, false);
-	private ModeValue Mode = new ModeValue("Mode", "Vanilla", "Vanilla", "Freeze");
-	private BooleanValue AntiKick = new BooleanValue("Anti-Kick", true);
-	public float DefaultSpeedInAir = 0.02f;
-	private float DefaultFlightSpeed = 0.05f;
-	private float DefaultWalkSpeed = 0.1f;
-	private double flyHeight;
-	private TimerUtil.Timer kickTimer = new TimerUtil.Timer();
+    private NumberValue<Float> Speed = new NumberValue<>("Speed", "How fast you move, in idgaf/second", 0.5f, 0f, 10f, false);
+    private ModeValue Mode = new ModeValue("Mode", "Flight mode", "Vanilla", "Vanilla", "Freeze");
+    private BooleanValue AntiKick = new BooleanValue("Anti-Kick", "Attempts to prevent the \"Flying is not enabled\" kick", true);
+    private double flyHeight;
+    private TimerUtil kickTimer = new TimerUtil();
 
 
-	public Flight() {
-		super("Flight", Category.MOVEMENT, "Allows you to fly");
-	}
+    public Flight() {
+        super("Flight", Category.MOVEMENT, "Allows you to fly");
+    }
 
 
-	@EventTarget
-	public void eventPreUpdate(EventPreUpdate event) {
+    @EventTarget
+    public void eventPreUpdate(EventPreUpdate event) {
 
 
 		if (Mode.getValue().equalsIgnoreCase("Vanilla")) {
-			minecraft.player.capabilities.isFlying = true;
-			minecraft.player.setVelocity(0, 0, 0);
-			minecraft.player.capabilities.setFlySpeed(Speed.getValue().floatValue() / 2);
-		} else if (Mode.getValue().equalsIgnoreCase("Freeze")) {
-			minecraft.player.capabilities.isFlying = false;
-			minecraft.player.setVelocity(0, 0, 0);
-			minecraft.player.setSpeedInAir(Speed.getValue().floatValue() / 2);
-			minecraft.player.inWater = false;
-		}
+            minecraft.player.capabilities.isFlying = true;
+            minecraft.player.setVelocity(0, 0, 0);
+            minecraft.player.capabilities.setFlySpeed(Speed.getValue() / 2);
+        } else if (Mode.getValue().equalsIgnoreCase("Freeze")) {
+            minecraft.player.capabilities.isFlying = false;
+            minecraft.player.setVelocity(0, 0, 0);
+            minecraft.player.setSpeedInAir(Speed.getValue() / 2);
+            minecraft.player.inWater = false;
+        }
 
 		if (AntiKick.getObject()) {
 			updateFlyHeight();
@@ -102,21 +99,21 @@ public class Flight extends Module {
 	public void onPreEntityLivingUpdate(EventPreEntityUpdate event) {
 		if (Mode.getValue().equalsIgnoreCase("Vanilla")) {
 			if (minecraft.player.movementInput.jump) {
-				minecraft.player.motionY = Speed.getValue().floatValue() / 2;
-			}
+                minecraft.player.motionY = Speed.getValue() / 2;
+            }
 			if (minecraft.player.movementInput.sneak) {
-				minecraft.player.motionY = Speed.getValue().floatValue() - (Speed.getValue().floatValue() * 1.5);
-			}
+                minecraft.player.motionY = Speed.getValue() - (Speed.getValue() * 1.5);
+            }
 			minecraft.player.movementInput.jump = false;
 			minecraft.player.movementInput.sneak = false;
 			minecraft.player.capabilities.isFlying = true;
 		} else if (Mode.getValue().equalsIgnoreCase("Freeze")) {
 			if (minecraft.player.movementInput.jump) {
-				minecraft.player.motionY = Speed.getValue().floatValue() / 2;
-			}
+                minecraft.player.motionY = Speed.getValue() / 2;
+            }
 			if (minecraft.player.movementInput.sneak) {
-				minecraft.player.motionY = Speed.getValue().floatValue() - (Speed.getValue().floatValue() * 1.5);
-			}
+                minecraft.player.motionY = Speed.getValue() - (Speed.getValue() * 1.5);
+            }
 			minecraft.player.movementInput.jump = false;
 			minecraft.player.movementInput.sneak = false;
 			minecraft.player.capabilities.isFlying = false;
@@ -125,12 +122,15 @@ public class Flight extends Module {
 
 
 	public void onDisable() {
-		minecraft.player.capabilities.isFlying = false;
-		minecraft.player.capabilities.setFlySpeed(DefaultFlightSpeed);
-		minecraft.player.capabilities.setPlayerWalkSpeed(DefaultWalkSpeed);
-		minecraft.player.setSpeedInAir(DefaultSpeedInAir);
-		minecraft.player.setVelocity(0, 0, 0);
-	}
+        minecraft.player.capabilities.isFlying = false;
+        float defaultFlightSpeed = 0.05f;
+        minecraft.player.capabilities.setFlySpeed(defaultFlightSpeed);
+        float defaultWalkSpeed = 0.1f;
+        minecraft.player.capabilities.setPlayerWalkSpeed(defaultWalkSpeed);
+        float defaultSpeedInAir = 0.02f;
+        minecraft.player.setSpeedInAir(defaultSpeedInAir);
+        minecraft.player.setVelocity(0, 0, 0);
+    }
 
 
 }

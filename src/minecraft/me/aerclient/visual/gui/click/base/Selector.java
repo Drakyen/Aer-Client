@@ -60,4 +60,19 @@ public abstract class Selector extends Element<ModeValue> {
         }
     }
 
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int button) {
+
+    }
+
+    @Override
+    public void keyPressed(int key) {
+
+    }
+
 }

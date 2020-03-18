@@ -11,9 +11,7 @@
 package me.aerclient.config.valuesystem;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 import java.util.Properties;
-import java.util.function.Predicate;
 
 public class NumberValue<T extends Number> extends Value<T> {
     private T min;
@@ -21,8 +19,8 @@ public class NumberValue<T extends Number> extends Value<T> {
     private boolean validate;
 
 
-    public NumberValue(String name, T defaultVal, @Nonnull T min, @Nonnull T max, boolean validate) {
-        super(name, defaultVal);
+    public NumberValue(String name, String description, T defaultVal, @Nonnull T min, @Nonnull T max, boolean validate) {
+        super(name, description, defaultVal);
         this.min = min;
         this.max = max;
         this.validate = validate;
@@ -37,7 +35,7 @@ public class NumberValue<T extends Number> extends Value<T> {
     }
 
     public T getValue() {
-        return (T) this.getObject();
+        return this.getObject();
     }
 
     @Override

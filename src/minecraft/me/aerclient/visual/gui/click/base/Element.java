@@ -1,8 +1,8 @@
 package me.aerclient.visual.gui.click.base;
 
 import me.aerclient.config.valuesystem.Value;
-import me.aerclient.visual.gui.base.basic.ClickableUI;
 import me.aerclient.implementation.utils.world.TimerUtil;
+import me.aerclient.visual.gui.base.basic.ClickableUI;
 
 import java.awt.*;
 
@@ -10,7 +10,7 @@ public abstract class Element<T extends Value> extends ClickableUI {
 
     protected ModuleButton parent;
     protected T value;
-    private TimerUtil.Timer timer = new TimerUtil.Timer();
+    private TimerUtil timer = new TimerUtil();
 
     /**
      * A base class for Click Gui elements that have a value and parent.
@@ -25,11 +25,20 @@ public abstract class Element<T extends Value> extends ClickableUI {
 
     @Override
     public void render(int mouseX, int mouseY) {
-        if(timer.delay(400) && hovered(mouseX, mouseY)){
+        if (parent.getParent().getParent().isShowTooltips() && timer.delay(parent.getParent().getParent().getTooltipDelay()) && hovered(mouseX, mouseY)) {
             parent.getParent().getParent().setHovered(this);
             timer.reset();
-        } else if(!hovered(mouseX, mouseY)) {
+        } else if (!hovered(mouseX, mouseY)) {
             timer.reset();
         }
+    }
+
+    @Override
+    public void scrolled(int amount) {
+
+    }
+
+    public T getSetting() {
+        return value;
     }
 }

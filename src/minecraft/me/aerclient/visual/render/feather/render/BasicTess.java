@@ -1,11 +1,12 @@
 package me.aerclient.visual.render.feather.render;
 
+import me.aerclient.visual.render.feather.util.BufferUtils;
+import org.lwjgl.opengl.GL11;
+
+import java.awt.*;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
-
-import me.aerclient.visual.render.feather.util.BufferUtils;
-import org.lwjgl.opengl.GL11;
 
 
 public class BasicTess implements Tessellator {
@@ -45,18 +46,19 @@ public class BasicTess implements Tessellator {
 	}
 	
 	@Override
-	public Tessellator vertex(float x, float y, float z)
-	{
-		final int dex = this.index*6;
-		this.raw[dex] = Float.floatToRawIntBits(x);
-		this.raw[dex+1] = Float.floatToRawIntBits(y);
-		this.raw[dex+2] = Float.floatToRawIntBits(z);
-		this.raw[dex+3] = this.colors;
-		this.raw[dex+4] = Float.floatToRawIntBits(this.texU);
-		this.raw[dex+5] = Float.floatToRawIntBits(this.texV);
-		this.index++;
-		return this;
-	}
+	public Tessellator vertex(float x, float y, float z) {
+        final int dex = this.index * 6;
+        this.raw[dex] = Float.floatToRawIntBits(x);
+        this.raw[dex + 1] = Float.floatToRawIntBits(y);
+        this.raw[dex + 2] = Float.floatToRawIntBits(z);
+        Color col = new Color(colors, true);
+        Color flippedCol = new Color(col.getBlue(), col.getGreen(), col.getRed(), col.getAlpha());
+        this.raw[dex + 3] = flippedCol.getRGB();
+        this.raw[dex + 4] = Float.floatToRawIntBits(this.texU);
+        this.raw[dex + 5] = Float.floatToRawIntBits(this.texV);
+        this.index++;
+        return this;
+    }
 	
 	@Override
 	public Tessellator bind()

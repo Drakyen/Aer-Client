@@ -1,9 +1,9 @@
 package me.aerclient.visual.style.modern.click;
 
 import me.aerclient.config.valuesystem.BooleanValue;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.base.ModuleButton;
 import me.aerclient.visual.gui.click.base.Toggle;
+import me.aerclient.visual.render.render2D.font.Fonts;
 
 import java.awt.*;
 
@@ -24,10 +24,6 @@ public class ModernToggle extends Toggle {
         super(xIn, yIn, widthIn, heightIn, value, parent);
     }
 
-    @Override
-    public void init() {
-
-    }
 
     @Override
     public void render(int mouseX, int mouseY) {
@@ -49,16 +45,5 @@ public class ModernToggle extends Toggle {
         rend2D.drawString(Fonts.normal, value.getName(), x + 5, y + 5, 0xffffffff, true);
 
     }
-
-    @Override
-    public void mouseReleased(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void keyPressed(int key) {
-
-    }
-
 
 }

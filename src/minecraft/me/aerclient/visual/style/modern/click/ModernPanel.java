@@ -1,10 +1,10 @@
 package me.aerclient.visual.style.modern.click;
 
 import me.aerclient.implementation.module.base.Category;
-import me.aerclient.visual.render.feather.animate.Animation;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.ClickGuiUI;
 import me.aerclient.visual.gui.click.base.Panel;
+import me.aerclient.visual.render.feather.animate.Animation;
+import me.aerclient.visual.render.render2D.font.Fonts;
 
 import java.awt.*;
 
@@ -29,6 +29,7 @@ public class ModernPanel extends Panel {
     @Override
     public void render(int mouseX, int mouseY) {
         super.render(mouseX, mouseY);
+        rend2D.setColor(col.getRGB(), col.getAlpha());
         rend2D.drawRect(x, y, x + width, y + height, col.getRGB());
         rend2D.drawString(Fonts.mid, getCat().name(), x + 3, y + 3, 0xffffffff, true);
         rend2D.drawString(Fonts.mid, (isExtended() ? "-" : "+"), x + width - 10, y + 2, 0xffffffff, true);

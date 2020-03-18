@@ -1,15 +1,15 @@
 package me.aerclient.implementation.module.modules.player;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.net.EventPacketSent;
+import me.aerclient.config.valuesystem.ModeValue;
 import me.aerclient.implementation.module.base.Category;
 import me.aerclient.implementation.module.base.Module;
-import me.aerclient.config.valuesystem.ModeValue;
+import me.aerclient.injection.events.net.EventPacketSent;
 import net.minecraft.network.play.client.CPacketPlayer;
 
 public class NoFall extends Module {
 
-	private ModeValue Mode = new ModeValue("Mode", "Packet", new String[]{"Packet"});
+	private ModeValue Mode = new ModeValue("Mode", "How to try and prevent you taking fall damage", "Packet", "Packet");
 
 	public NoFall() {
 		super("NoFall", Category.PLAYER, "Prevents you from taking fall damage");

@@ -4,12 +4,12 @@ import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
 import me.aerclient.Aer;
 import me.aerclient.implementation.command.Command;
+import me.aerclient.implementation.utils.world.WorldUtils;
+import me.aerclient.injection.events.net.EventHandleJoinGame;
 import me.aerclient.injection.events.render.EventGuiOpened;
-import me.aerclient.injection.events.net.EventPacketRecieved;
 import me.aerclient.visual.gui.screen.VanishGui;
 import me.aerclient.visual.render.render2D.ChatColour;
 import me.aerclient.visual.render.render2D.ChatUtils;
-import me.aerclient.implementation.utils.world.WorldUtils;
 import net.minecraft.client.gui.GuiDisconnected;
 import net.minecraft.client.multiplayer.ServerAddress;
 import net.minecraft.client.multiplayer.ServerData;
@@ -18,7 +18,6 @@ import net.minecraft.network.EnumConnectionState;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.handshake.client.C00Handshake;
 import net.minecraft.network.login.client.CPacketLoginStart;
-import net.minecraft.network.play.server.SPacketJoinGame;
 import net.minecraft.util.text.TextComponentTranslation;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
@@ -79,7 +78,7 @@ public class Vanish extends Command {
                     LOGGER.error("Couldn't connect to server", unknownhostexception);
                     minecraft.displayGuiScreen(new GuiDisconnected(null, "connect.failed", new TextComponentTranslation("disconnect.genericReason", "Unknown host")));
                 } catch (Exception exception) {
-                    LOGGER.error("Couldn't connect to server", (Throwable) exception);
+                    LOGGER.error("Couldn't connect to server", exception);
                     String s = exception.toString();
 
                     if (inetaddress != null) {
@@ -95,11 +94,8 @@ public class Vanish extends Command {
     }
 
     @EventTarget
-    public void onPacket(EventPacketRecieved event) {
-        if (event.packet instanceof SPacketJoinGame) {
-            SPacketJoinGame packet = (SPacketJoinGame) event.packet;
-            event.doGui = false;
-        }
+    public void onPacket(EventHandleJoinGame event) {
+        event.doGui = false;
     }
 
     @EventTarget

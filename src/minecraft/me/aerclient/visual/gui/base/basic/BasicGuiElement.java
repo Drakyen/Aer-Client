@@ -25,6 +25,8 @@ public abstract class BasicGuiElement implements UI {
     public abstract void mouseReleased(int mouseX, int mouseY, int button);
     public abstract void keyPressed(int key);
 
+    public abstract void scrolled(int amount);
+
     public int getX(){return x;}
     public int getY(){return y;}
     public UI setX(int xIn){x = xIn; return this;}

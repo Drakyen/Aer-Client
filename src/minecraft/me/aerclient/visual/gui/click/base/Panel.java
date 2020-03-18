@@ -4,19 +4,21 @@ package me.aerclient.visual.gui.click.base;
 import me.aerclient.implementation.module.base.Category;
 import me.aerclient.implementation.module.base.Module;
 import me.aerclient.implementation.module.base.ModuleManager;
-import me.aerclient.visual.render.feather.animate.Animation;
-import me.aerclient.visual.render.feather.animate.TimeAnimation;
 import me.aerclient.visual.gui.base.basic.UI;
 import me.aerclient.visual.gui.base.container.ClickableDraggableGuiContainer;
 import me.aerclient.visual.gui.click.ClickGuiUI;
+import me.aerclient.visual.render.feather.animate.Animation;
+import me.aerclient.visual.render.feather.animate.TimeAnimation;
+import net.minecraft.client.gui.ScaledResolution;
 
 import java.awt.*;
 
 public abstract class Panel extends ClickableDraggableGuiContainer {
 
-    private TimeAnimation animation;
-    private boolean extended = false;
+    protected TimeAnimation animation;
+    private boolean extended;
     private ClickGuiUI parent;
+    private boolean forcePosition;
 
     private Category cat;
 
@@ -25,6 +27,7 @@ public abstract class Panel extends ClickableDraggableGuiContainer {
         parent = parentIn;
         cat = catIn;
         extended = extendedIn;
+        forcePosition = true;
         animation = new TimeAnimation();
         animation.setTransition(type);
         animation.setDuration(animationDuration);
@@ -66,7 +69,7 @@ public abstract class Panel extends ClickableDraggableGuiContainer {
     public void renderChildren(int mouseX, int mouseY) {
         int totalOffset = getHeightOfChildren();
         int offset = (int) (this.getHeight() - (totalOffset * animation.get()));
-        for(UI ui : getChildren()){
+        for (UI ui : getChildren()) {
             ui.setX(this.getX()).setY(this.getY() + offset);
             ui.render(mouseX, mouseY);
             offset += ui.getHeight();
@@ -116,13 +119,24 @@ public abstract class Panel extends ClickableDraggableGuiContainer {
 
     @Override
     public void mouseReleased(int mouseX, int mouseY, int button) {
-        if(animation.get() < 0.5 && extended){
+        if (animation.get() < 0.5 && extended) {
             setChildrenTakeInput(true);
-        }
-        else if(animation.get() > 0.5 && !extended){
+        } else if (animation.get() > 0.5 && !extended) {
             setChildrenTakeInput(false);
         }
         super.mouseReleased(mouseX, mouseY, button);
+    }
+
+    @Override
+    public void scrolled(int amount) {
+        final ScaledResolution res = new ScaledResolution(minecraft);
+        if (y + amount > res.getScaledHeight() - height) {
+            this.y = res.getScaledHeight() - height;
+        } else if (y + amount < -100) {
+            this.y = -100;
+        } else {
+            this.y += amount;
+        }
     }
 
     public ClickGuiUI getParent() {

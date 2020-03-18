@@ -1,10 +1,10 @@
 package me.aerclient.visual.style.modern.click;
 
 import me.aerclient.implementation.module.base.Module;
-import me.aerclient.visual.render.feather.animate.Animation;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.base.ModuleButton;
 import me.aerclient.visual.gui.click.base.Panel;
+import me.aerclient.visual.render.feather.animate.Animation;
+import me.aerclient.visual.render.render2D.font.Fonts;
 
 import java.awt.*;
 
@@ -31,16 +31,16 @@ public class ModernModuleButton extends ModuleButton {
 
         if (getModule().isActive()) {
             if (hovered(mouseX, mouseY) && getParent().getParent().allowAction(getParent(), mouseX, mouseY)) {
-                rend2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0f, col.darker().darker().darker().getRGB(), col.darker().darker().getRGB());
+                rend2D.drawGradVert(7, x + 2, y, x + width - 2, y + height, col.darker().darker().darker().getRGB(), col.darker().darker().getRGB());
             } else {
-                rend2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0f, col.darker().getRGB(), col.darker().darker().getRGB());
+                rend2D.drawGradVert(7, x + 2, y, x + width - 2, y + height, col.darker().getRGB(), col.darker().darker().getRGB());
             }
             rend2D.drawString(Fonts.normal, getName(), x + 5, y + 5, 0xffffffff, true);
         } else {
             if (hovered(mouseX,mouseY) && getParent().getParent().allowAction(getParent(), mouseX, mouseY)) {
-                rend2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.darker().getRGB(), foregroundCol.getRGB());
+                rend2D.drawGradVert(7, x + 2, y, x + width - 2, y + height, foregroundCol.darker().getRGB(), foregroundCol.getRGB());
             } else {
-                rend2D.drawGradientRectVert(x + 2, y, x + width - 2, y + height, 0, foregroundCol.brighter().getRGB(), foregroundCol.getRGB());
+                rend2D.drawGradVert(7, x + 2, y, x + width - 2, y + height, foregroundCol.brighter().getRGB(), foregroundCol.getRGB());
             }
             rend2D.drawString(Fonts.normal, getName(), x + 5, y + 5, 0xffaaaaaa, true);
         }

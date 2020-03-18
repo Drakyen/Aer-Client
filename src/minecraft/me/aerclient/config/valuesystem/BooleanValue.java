@@ -15,18 +15,18 @@ import java.util.Properties;
 
 public class BooleanValue extends Value<Boolean> {
 
-	public BooleanValue(String name, Boolean defaultValue) {
-		super(name, defaultValue);
-	}
+    public BooleanValue(String name, String description, Boolean defaultValue) {
+        super(name, description, defaultValue);
+    }
 
-	@Override
-	public void addToProperties(Properties props) {
-		props.setProperty(this.getName(), "" + this.getObject());
+    @Override
+    public void addToProperties(Properties props) {
+        props.setProperty(this.getName(), "" + this.getObject());
 
-	}
+    }
 
-	@Override
-	public void fromProperties(Properties props) {
+    @Override
+    public void fromProperties(Properties props) {
 		this.setObject(Boolean.valueOf(props.getProperty(this.getName(), "" + this.getDefault())));
 
 	}

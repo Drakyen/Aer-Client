@@ -1,8 +1,8 @@
 package me.aerclient.visual.style.modern.click;
 
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.base.Keybinding;
 import me.aerclient.visual.gui.click.base.ModuleButton;
+import me.aerclient.visual.render.render2D.font.Fonts;
 import org.lwjgl.input.Keyboard;
 
 import java.awt.*;
@@ -24,11 +24,6 @@ public class ModernKeybinding extends Keybinding {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void render(int mouseX, int mouseY) {
         super.render(mouseX, mouseY);
         rend2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
@@ -44,8 +39,4 @@ public class ModernKeybinding extends Keybinding {
         }
     }
 
-    @Override
-    public void mouseReleased(int mouseX, int mouseY, int button) {
-
-    }
 }

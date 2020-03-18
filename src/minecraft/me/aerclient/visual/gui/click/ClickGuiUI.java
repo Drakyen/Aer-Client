@@ -2,20 +2,22 @@ package me.aerclient.visual.gui.click;
 
 import me.aerclient.config.ConfigHandler;
 import me.aerclient.implementation.module.base.Category;
-import me.aerclient.visual.style.Style;
+import me.aerclient.implementation.utils.Utilities;
 import me.aerclient.visual.gui.base.basic.UI;
 import me.aerclient.visual.gui.click.base.Element;
 import me.aerclient.visual.gui.click.base.Keybinding;
 import me.aerclient.visual.gui.click.base.ModuleButton;
 import me.aerclient.visual.gui.click.base.Panel;
-import me.aerclient.implementation.utils.Utilities;
+import me.aerclient.visual.style.Style;
 import net.minecraft.client.gui.GuiScreen;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.OpenGlHelper;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.ResourceLocation;
 import org.lwjgl.input.Keyboard;
+import org.lwjgl.opengl.GL11;
 
-import java.awt.Color;
+import java.awt.*;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,49 +34,84 @@ public class ClickGuiUI extends GuiScreen implements Utilities {
     private boolean blurMode;
     private boolean soundMode;
     private UI hoveredObject;
+    private int tooltipDelay = 400;
+    private boolean showTooltips = true;
+    private float scrollSpeed = 1f;
 
-
-    public ClickGuiUI(Style styleIn){
+    public ClickGuiUI(Style styleIn) {
         clickGuiProps = ConfigHandler.loadSettings("clickGuiProps", new Properties());
-        this.style = styleIn;
+        style = styleIn;
         init();
     }
 
-    public void init(){
-       createPanels();
-       setCol(new Color(0.5f, 0.5f, 0.5f, 0.5f));
+    public boolean isShowTooltips() {
+        return showTooltips;
+    }
+
+    public void setShowTooltips(boolean showTooltips) {
+        this.showTooltips = showTooltips;
+    }
+
+    public int getTooltipDelay() {
+        return tooltipDelay;
+    }
+
+    public void setTooltipDelay(int tooltipDelay) {
+        this.tooltipDelay = tooltipDelay;
+    }
+
+    public void init() {
+        createPanels();
+        setCol(new Color(0.5f, 0.5f, 0.5f, 0.5f));
     }
 
     @Override
     public void drawScreen(int mouseX, int mouseY, float partialTicks) {
         super.drawScreen(mouseX, mouseY, partialTicks);
-        for(Panel p : panels) {
+        rend2D.enableArray(GL11.GL_VERTEX_ARRAY);
+        rend2D.enableBlending();
+        GlStateManager.disableTexture2D();
+        for (Panel p : panels) {
             p.render(mouseX, mouseY);
         }
-        if(hoveredObject != null && hoveredObject.hovered(mouseX, mouseY)){
-            if(hoveredObject instanceof ModuleButton) {
+        if (hoveredObject != null && hoveredObject.hovered(mouseX, mouseY)) {
+            if (hoveredObject instanceof ModuleButton) {
                 style.renderTooltip(((ModuleButton) hoveredObject).getModule().getDescription(), mouseX, mouseY, guiCol);
+            } else if (hoveredObject instanceof Element) {
+                if (((Element) hoveredObject).getSetting() != null) {
+                    style.renderTooltip(((Element) hoveredObject).getSetting().getDescription(), mouseX, mouseY, guiCol);
+                }
             }
-            else if(hoveredObject instanceof Element){
-
-            }
+        } else {
+            hoveredObject = null;
         }
+        rend2D.disableArray(GL11.GL_VERTEX_ARRAY);
+        GlStateManager.enableTexture2D();
     }
 
     @Override
     protected void mouseClicked(int mouseX, int mouseY, int mouseButton) throws IOException {
         super.mouseClicked(mouseX, mouseY, mouseButton);
-        for(Panel p : panels) {
-            if(allowAction(p, mouseX, mouseY)) {
+        for (Panel p : panels) {
+            if (allowAction(p, mouseX, mouseY)) {
                 p.mouseClicked(mouseX, mouseY, mouseButton);
             }
         }
     }
 
     @Override
+    public void mouseScrolled(int scroll) {
+        super.mouseScrolled(scroll);
+        scroll = scroll / 10;
+        for (Panel p : panels) {
+            p.scrolled((int) -(scroll * scrollSpeed));
+        }
+    }
+
+    @Override
     protected void mouseReleased(int mouseX, int mouseY, int state) {
         super.mouseReleased(mouseX, mouseY, state);
-        for(Panel p : panels) {
+        for (Panel p : panels) {
             p.mouseReleased(mouseX, mouseY, state);
         }
     }
@@ -82,7 +119,7 @@ public class ClickGuiUI extends GuiScreen implements Utilities {
     @Override
     protected void keyTyped(char typedChar, int keyCode) throws IOException {
         if (keyCode == Keyboard.KEY_ESCAPE && !this.keybindListening()) {
-            minecraft.displayGuiScreen((GuiScreen) null);
+            minecraft.displayGuiScreen(null);
         }
         for(Panel p : panels) {
             p.keyPressed(keyCode);
@@ -91,11 +128,6 @@ public class ClickGuiUI extends GuiScreen implements Utilities {
 
     public Color getGuiCol(){
         return guiCol;
-    }
-
-    public void setStyle(Style newStyle){
-        style = newStyle;
-        init();
     }
 
     public void setHovered(ModuleButton button){
@@ -146,7 +178,7 @@ public class ClickGuiUI extends GuiScreen implements Utilities {
         for (Panel p : panels) {
             for (UI button : p.getChildren()) {
                 for (UI e : ((ModuleButton)button).getChildren()) {
-                    if ((Element)e instanceof Keybinding && ((Keybinding) e).isListening()) {
+                    if (e instanceof Keybinding && ((Keybinding) e).isListening()) {
                         return true;
                     }
                 }
@@ -227,12 +259,16 @@ public class ClickGuiUI extends GuiScreen implements Utilities {
         return style;
     }
 
-    public void setBlurMode(boolean blurModeIn){
+    public void setBlurMode(boolean blurModeIn) {
         blurMode = blurModeIn;
     }
 
     public void setSoundMode(boolean soundMode) {
         this.soundMode = soundMode;
+    }
+
+    public void setScrollSpeed(float scrollSpeed) {
+        this.scrollSpeed = scrollSpeed;
     }
 
 }

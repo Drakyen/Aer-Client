@@ -34,13 +34,27 @@ public abstract class Toggle extends Element<BooleanValue> {
         }
     }
 
-    public boolean isToggled(){
+    public boolean isToggled() {
         return toggled;
     }
 
-    public void setToggled(boolean toggle){
+    public void setToggled(boolean toggle) {
         toggled = toggle;
     }
 
+    @Override
+    public void init() {
+
+    }
+
+    @Override
+    public void mouseReleased(int mouseX, int mouseY, int button) {
+
+    }
+
+    @Override
+    public void keyPressed(int key) {
+
+    }
 
 }

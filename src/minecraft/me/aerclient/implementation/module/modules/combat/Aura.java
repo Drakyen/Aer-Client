@@ -1,12 +1,11 @@
 package me.aerclient.implementation.module.modules.combat;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.world.EventPreTick;
-import me.aerclient.implementation.module.base.Category;
-import me.aerclient.implementation.module.base.Module;
 import me.aerclient.config.valuesystem.BooleanValue;
 import me.aerclient.config.valuesystem.NumberValue;
-import net.minecraft.entity.Entity;
+import me.aerclient.implementation.module.base.Category;
+import me.aerclient.implementation.module.base.Module;
+import me.aerclient.injection.events.world.EventPreTick;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.util.EnumHand;
 
@@ -15,11 +14,11 @@ import java.util.List;
 public class Aura extends Module {
 
 
-	private BooleanValue aura = new BooleanValue("Aura", true);
-	private BooleanValue crystals = new BooleanValue("Crystals", true);
-	private BooleanValue players = new BooleanValue("Players", true);
+	private BooleanValue aura = new BooleanValue("Aura", "Whether to punch entities", true);
+	private BooleanValue crystals = new BooleanValue("Crystals", "Whether to attack with crystals", true);
+	private BooleanValue players = new BooleanValue("Players", "Whether to attack players", true);
 
-	private NumberValue<Integer> kaDelay = new NumberValue<>("Delay", 2, 1, 10, true);
+	private NumberValue<Integer> kaDelay = new NumberValue<>("Delay", "How long to wait between attacks", 2, 1, 10, true);
 
 
 	public Aura() {
@@ -30,33 +29,31 @@ public class Aura extends Module {
 
 	@EventTarget
 	public void onTick(EventPreTick event) {
-		List list = minecraft.world.playerEntities;
+		List<EntityPlayer> list = minecraft.world.playerEntities;
 		delay++;
 
-		if(aura.getObject()){
-			if(players.getObject()){
+		if (aura.getObject()) {
+			if (players.getObject()) {
 
-				for(int k = 0; k < list.size(); k++){
-					if(((EntityPlayer) list.get(k)).getName() == minecraft.player.getName()){
+				for (EntityPlayer o : list) {
+					if (o.getName().equals(minecraft.player.getName())) {
 						continue;
 					}
 
-					EntityPlayer entityplayer = (EntityPlayer) list.get(1);
+					EntityPlayer entityplayer = list.get(1);
 
-					if(minecraft.player.getDistanceToEntity(entityplayer) > minecraft.player.getDistanceToEntity((Entity) list.get(k))){
-						entityplayer = (EntityPlayer) list.get(k);
+					if (minecraft.player.getDistanceToEntity(entityplayer) > minecraft.player.getDistanceToEntity(o)) {
+						entityplayer = o;
 					}
 
 					float f = minecraft.player.getDistanceToEntity(entityplayer);
 
-					if(f < 4F && minecraft.player.canEntityBeSeen(entityplayer) && delay > kaDelay.getValue()){
+					if (f < 4F && minecraft.player.canEntityBeSeen(entityplayer) && delay > kaDelay.getValue()) {
 
 						Aimbot.faceEntity(entityplayer);
 						minecraft.playerController.attackEntity(minecraft.player, entityplayer);
 						minecraft.player.swingArm(EnumHand.MAIN_HAND);
 						delay = 0;
-						continue;
-
 					}
 
 				}

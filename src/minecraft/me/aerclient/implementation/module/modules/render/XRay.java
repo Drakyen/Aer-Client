@@ -1,40 +1,50 @@
 package me.aerclient.implementation.module.modules.render;
 
-import com.darkmagician6.eventapi.EventManager;
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.render.EventRenderBlock;
-import me.aerclient.injection.events.world.EventWorldLoaded;
-import me.aerclient.implementation.module.base.Category;
-import me.aerclient.implementation.module.base.Module;
 import me.aerclient.config.valuesystem.BlockArrayValue;
+import me.aerclient.config.valuesystem.BooleanValue;
 import me.aerclient.config.valuesystem.ModeValue;
 import me.aerclient.config.valuesystem.NumberValue;
+import me.aerclient.implementation.module.base.Category;
+import me.aerclient.implementation.module.base.Module;
 import me.aerclient.implementation.utils.world.WorldUtils;
+import me.aerclient.injection.events.client.EventValueChanged;
+import me.aerclient.injection.events.render.EventRenderBlock;
+import me.aerclient.injection.events.world.EventWorldLoaded;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockOre;
+import net.minecraft.util.EnumFacing;
+import net.minecraft.util.math.BlockPos;
 
 import java.util.ArrayList;
 
 public class XRay extends Module {
 
-    private NumberValue Opacity = new NumberValue("Opacity", 0.4f, 0f, 1f, true);
-    private ModeValue presets = new ModeValue("Presets", "Ores", new String[]{"Custom", "Ores", "Valuables", "Useful", "Redstone"});
-    public BlockArrayValue custom = new BlockArrayValue("Custom Blocks", new ArrayList<Block>());
-    private BlockArrayValue valuables;
-    private BlockArrayValue useful;
-    private BlockArrayValue redstone;
-    private String current = presets.getValue();
-    int occlusion = 1;
+	public BlockArrayValue custom = new BlockArrayValue("Custom Blocks", "blah blah this doesn't even show up on the gui currently", new ArrayList<Block>());
+	private NumberValue<Float> Opacity = new NumberValue<>("Opacity", "Alpha/transparency for non-xray blocks", 0.4f, 0f, 1f, true);
+	private ModeValue presets = new ModeValue("Presets", "Various basic preset block lists", "Ores", "Custom", "Ores", "Valuables", "Useful", "Redstone");
+	private BooleanValue liquids = new BooleanValue("Liquids", "Prevents liquids from becoming transparent", true);
+	private BlockArrayValue valuables;
+	private BlockArrayValue useful;
+	private BlockArrayValue redstone;
+	private String current = presets.getValue();
+	private float currentOpacity = 1.0f;
+	private int occlusion = 1;
 
 
-    public XRay() {
-        super("XRay", Category.RENDER, "Allows you to see through the ground");
-    }
+	public XRay() {
+		super("XRay", Category.RENDER, "Allows you to see through the ground");
+	}
 
-    public void setup() {
-        ArrayList<Block> temp = new ArrayList<Block>();
+	public static boolean shouldRenderSide(BlockPos pos, EnumFacing direction) {
+		Block block = minecraft.world.getBlockState(pos).getBlock();
+		return !minecraft.world.getBlockState(pos.offset(direction)).getBlock().getLocalizedName().equals(block.getLocalizedName());
+	}
 
-        temp.add(Block.getBlockById(41));
+	public void setup() {
+		ArrayList<Block> temp = new ArrayList<Block>();
+
+		temp.add(Block.getBlockById(41));
 		temp.add(Block.getBlockById(57));
 		temp.add(Block.getBlockById(56));
 		temp.add(Block.getBlockById(133));
@@ -45,7 +55,7 @@ public class XRay extends Module {
 		temp.add(Block.getBlockById(22));
 		temp.add(Block.getBlockById(138));
 
-		valuables = new BlockArrayValue("Valuables", new ArrayList<Block>(temp));
+		valuables = new BlockArrayValue("Valuables", "", new ArrayList<Block>(temp));
 
 		temp.clear();
 
@@ -57,7 +67,7 @@ public class XRay extends Module {
 		temp.add(Block.getBlockById(209));
 		temp.add(Block.getBlockById(145));
 
-		useful = new BlockArrayValue("Useful", new ArrayList<Block>(temp));
+		useful = new BlockArrayValue("Useful", "", new ArrayList<Block>(temp));
 
 		temp.clear();
 
@@ -92,72 +102,66 @@ public class XRay extends Module {
 		temp.add(Block.getBlockById(158));
 		temp.add(Block.getBlockById(218));
 
-		redstone = new BlockArrayValue("Redstone", new ArrayList<Block>(temp));
+		redstone = new BlockArrayValue("Redstone", "", new ArrayList<Block>(temp));
 
 		temp.clear();
 
 	}
 
-
-	public void onValueUpdate() {
-		if (current != presets.getValue()) {
+	@EventTarget
+	public void onValueUpdate(EventValueChanged event) {
+		if (!current.equals(presets.getValue()) || Opacity.getValue() != currentOpacity) {
 			current = presets.getValue();
-            minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-        }
-    }
+			//minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
+		}
+		currentOpacity = Opacity.getValue();
+	}
 
-    public void onEnable() {
-        occlusion = minecraft.gameSettings.ambientOcclusion;
-        minecraft.gameSettings.ambientOcclusion = 1;
-        WorldUtils.setBlocksTransparent(true, true);
-        WorldUtils.setCulling(false, true);
-        minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
+	public void onEnable() {
+		currentOpacity = Opacity.getValue();
+		occlusion = minecraft.gameSettings.ambientOcclusion;
+		minecraft.gameSettings.ambientOcclusion = 1;
+		WorldUtils.setBlocksTransparent(true, true);
+		WorldUtils.setCulling(false, true);
+		minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
 
-    }
-
-    public void onDisable() {
-        minecraft.gameSettings.ambientOcclusion = occlusion;
-        WorldUtils.setBlocksTransparent(false, true);
-        WorldUtils.setCulling(true, true);
-        minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
-
-    }
-
-    @EventTarget
-    public void onWorldLoad(EventWorldLoaded event) {
-        if (this.active) {
-            this.onEnable();
-        }
-    }
-
+	}
 
 	@EventTarget
-	public void renderBlock(EventRenderBlock event) {
-        if (xrayBlock(event.block)) {
-            event.checkSides = false;
-            return;
-        }
-        event.blockOpacity = Opacity.getValue().floatValue();
-    }
-
-
-	@Override
-	public void toggle() {
-		this.setActiveState(!isActive());
-		if (this.isActive() == true) {
-			EventManager.register(this);
+	public void onWorldLoad(EventWorldLoaded event) {
+		if (this.active) {
 			this.onEnable();
-		} else if (this.isActive() == false) {
-			this.onDisable();
 		}
 	}
 
+	public void onDisable() {
+		currentOpacity = Opacity.getValue();
+		minecraft.gameSettings.ambientOcclusion = occlusion;
+		WorldUtils.setBlocksTransparent(false, true);
+		WorldUtils.setCulling(true, true);
+		minecraft.world.markBlockRangeForRenderUpdate((int) minecraft.player.posX - 128, (int) minecraft.player.posY - 128, (int) minecraft.player.posZ - 128, (int) minecraft.player.posX + 128, (int) minecraft.player.posY + 128, (int) minecraft.player.posZ + 128);
+
+	}
+
+	@EventTarget
+	public void renderBlock(EventRenderBlock event) {
+		if (xrayBlock(event.block)) {
+			event.checkSides = false;
+			return;
+		}
+		if (!event.liquid || liquids.getObject()) {
+			event.blockOpacity = Opacity.getValue();
+		}
+		if (event.liquid) {
+			event.checkSides = false;
+		}
+	}
 
 	private boolean xrayBlock(Block block) {
 		if (presets.getValue().equalsIgnoreCase("Custom")) {
 			return custom.getObject().contains(block);
 		} else if (presets.getValue().equalsIgnoreCase("Ores")) {
-			return block instanceof BlockOre ? true : false;
+			return block instanceof BlockOre;
 		} else if (presets.getValue().equalsIgnoreCase("Valuables")) {
 			return valuables.getObject().contains(block);
 		} else if (presets.getValue().equalsIgnoreCase("Useful")) {

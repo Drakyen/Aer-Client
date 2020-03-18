@@ -1,15 +1,14 @@
 package me.aerclient.implementation.module.modules.render;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.world.EventPreTick;
 import me.aerclient.implementation.module.base.Category;
 import me.aerclient.implementation.module.base.Module;
+import me.aerclient.injection.events.world.EventPreTick;
 import net.minecraft.client.settings.GameSettings;
 
 public class Brightness extends Module implements Runnable {
 
     public static boolean state;
-    private Thread thread;
     private boolean start;
 
     public Brightness() {
@@ -47,7 +46,7 @@ public class Brightness extends Module implements Runnable {
 
     @Override
     public void run() {
-        while (minecraft.gameSettings.gammaSetting < 3.0f && state == true) {
+        while (minecraft.gameSettings.gammaSetting < 3.0f && state) {
             final GameSettings gameSettings = minecraft.gameSettings;
             gameSettings.gammaSetting += 0.003f;
             try {
@@ -56,7 +55,7 @@ public class Brightness extends Module implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (minecraft.gameSettings.gammaSetting < 12.0f && state == true) {
+        while (minecraft.gameSettings.gammaSetting < 12.0f && state) {
             final GameSettings gameSettings = minecraft.gameSettings;
             gameSettings.gammaSetting += 0.01f;
             try {
@@ -65,7 +64,7 @@ public class Brightness extends Module implements Runnable {
                 e.printStackTrace();
             }
         }
-        while (minecraft.gameSettings.gammaSetting > 3.0f && state == false) {
+        while (minecraft.gameSettings.gammaSetting > 3.0f && !state) {
             final GameSettings gameSettings2 = minecraft.gameSettings;
             gameSettings2.gammaSetting -= 0.01f;
             try {
@@ -75,7 +74,7 @@ public class Brightness extends Module implements Runnable {
             }
         }
 
-        while (minecraft.gameSettings.gammaSetting > 1f && state == false) {
+        while (minecraft.gameSettings.gammaSetting > 1f && !state) {
             final GameSettings gameSettings2 = minecraft.gameSettings;
             gameSettings2.gammaSetting -= 0.003f;
             try {

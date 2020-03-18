@@ -38,7 +38,18 @@ public class TimerUtil {
      * The current relative time in milliseconds, rolls back to zero each second.
      */
     private static long time = 0;
+    /**
+     * The system time when this was last reset
+     */
+    private long prevMS;
 
+
+    /**
+     * A TimerUtil in order to use the dynamic timer functions
+     */
+    public TimerUtil() {
+        this.prevMS = 0L;
+    }
 
     /**
      * Increments all timers and checks whether any of the registered methods need calling yet
@@ -50,10 +61,10 @@ public class TimerUtil {
             if (i == 0) {
                 try {
                     Object key = entry.getKey();
-                    Method meth = methods.get(key);
+                    Method method = methods.get(key);
                     methods.remove(key);
                     timers.remove(key);
-                    meth.invoke(key, null);
+                    method.invoke(key, (Object) null);
                 } catch (IllegalAccessException | InvocationTargetException e) {
                     e.printStackTrace();
                 }
@@ -96,61 +107,44 @@ public class TimerUtil {
 
     }
 
+    /**
+     * Checks whether the given amount of time has passed since this timer was reset
+     *
+     * @param milliSec
+     * @return Whether the given amount of time has passed
+     */
+    public boolean delay(float milliSec) {
+        return (float) (getTime() - this.prevMS) >= milliSec;
+    }
 
-    public static class Timer {
+    /**
+     * Resets the delay timer
+     */
+    public void reset() {
+        this.prevMS = getTime();
+    }
 
-        /**
-         * A timer, as a subclass of TimerUtil
-         */
-        public Timer() {
-            this.prevMS = 0L;
-        }
+    /**
+     * @return The system time in milliseconds
+     */
+    public long getTime() {
+        return System.nanoTime() / 1000000L;
+    }
 
-        /**
-         * The system time when this was last reset
-         */
-        private long prevMS;
+    /**
+     * @return The difference between the last reset time and the current time
+     */
+    public long getDifference() {
+        return this.getTime() - this.prevMS;
+    }
 
-        /**
-         * Checks whether the given amount of time has passed since this timer was reset
-         *
-         * @param milliSec
-         * @return Whether the given amount of time has passed
-         */
-        public boolean delay(float milliSec) {
-            return (float) (getTime() - this.prevMS) >= milliSec;
-        }
-
-        /**
-         * Resets the delay timer
-         */
-        public void reset() {
-            this.prevMS = getTime();
-        }
-
-        /**
-         * @return The system time in milliseconds
-         */
-        public long getTime() {
-            return System.nanoTime() / 1000000L;
-        }
-
-        /**
-         * @return The difference between the last reset time and the current time
-         */
-        public long getDifference() {
-            return this.getTime() - this.prevMS;
-        }
-
-        /**
-         * Sets the difference.. not sure what this is needed for.
-         *
-         * @param difference
-         */
-        public void setDifference(long difference) {
-            this.prevMS = (getTime() - difference);
-        }
-
+    /**
+     * Sets the difference.. not sure what this is needed for.
+     *
+     * @param difference
+     */
+    public void setDifference(long difference) {
+        this.prevMS = (getTime() - difference);
     }
 
 }

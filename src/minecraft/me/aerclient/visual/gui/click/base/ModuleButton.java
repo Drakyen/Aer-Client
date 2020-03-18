@@ -2,11 +2,11 @@ package me.aerclient.visual.gui.click.base;
 
 import me.aerclient.config.valuesystem.*;
 import me.aerclient.implementation.module.base.Module;
-import me.aerclient.visual.render.feather.animate.Animation;
-import me.aerclient.visual.render.feather.animate.TimeAnimation;
+import me.aerclient.implementation.utils.world.TimerUtil;
 import me.aerclient.visual.gui.base.basic.UI;
 import me.aerclient.visual.gui.base.container.ClickableGuiContainer;
-import me.aerclient.implementation.utils.world.TimerUtil;
+import me.aerclient.visual.render.feather.animate.Animation;
+import me.aerclient.visual.render.feather.animate.TimeAnimation;
 import net.minecraft.client.audio.PositionedSoundRecord;
 import net.minecraft.init.SoundEvents;
 
@@ -16,11 +16,11 @@ public abstract class ModuleButton extends ClickableGuiContainer {
 
     private Panel parent;
     private Module module;
-    private TimeAnimation animation;
+    protected TimeAnimation animation;
     private boolean extended;
     private boolean currentState;
     private int offset;
-    private TimerUtil.Timer timer = new TimerUtil.Timer();
+    private TimerUtil timer = new TimerUtil();
 
     public ModuleButton(int xIn, int yIn, int widthIn, int heightIn, boolean extendedIn, Module moduleIn, Panel parentIn, Animation.Transition type, int animationDuration) {
         super(xIn, yIn, widthIn, heightIn);
@@ -62,13 +62,13 @@ public abstract class ModuleButton extends ClickableGuiContainer {
     @Override
     public void render(int mouseX, int mouseY) {
         super.render(mouseX, mouseY);
-        if(timer.delay(400) && hovered(mouseX, mouseY)){
+        if (parent.getParent().isShowTooltips() && timer.delay(parent.getParent().getTooltipDelay()) && hovered(mouseX, mouseY)) {
             parent.getParent().setHovered(this);
             timer.reset();
-        } else if(!hovered(mouseX, mouseY)) {
+        } else if (!hovered(mouseX, mouseY)) {
             timer.reset();
         }
-        if(this.getY() < parent.getY()){
+        if (this.getY() < parent.getY()) {
             return;
         }
         renderModuleButton(mouseX, mouseY);
@@ -152,12 +152,16 @@ public abstract class ModuleButton extends ClickableGuiContainer {
 
     @Override
     public void keyPressed(int key) {
-        if(animation.get() < 0.5 && extended){
+        if (animation.get() < 0.5 && extended) {
             setChildrenTakeInput(true);
-        }
-        else if(animation.get() > 0.5 && !extended){
+        } else if (animation.get() > 0.5 && !extended) {
             setChildrenTakeInput(false);
         }
         super.keyPressed(key);
+    }
+
+    @Override
+    public void scrolled(int amount) {
+
     }
 }

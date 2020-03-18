@@ -1,9 +1,9 @@
 package me.aerclient.visual.style.modern.click;
 
 import me.aerclient.config.valuesystem.NumberValue;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.base.ModuleButton;
 import me.aerclient.visual.gui.click.base.Slider;
+import me.aerclient.visual.render.render2D.font.Fonts;
 
 import java.awt.*;
 
@@ -23,10 +23,6 @@ public class ModernSlider extends Slider {
         foregroundCol = new Color(70, 70, 70, newCol.getAlpha());
     }
 
-    @Override
-    public void init() {
-
-    }
 
     @Override
     public void render(int mouseX, int mouseY) {
@@ -42,8 +38,5 @@ public class ModernSlider extends Slider {
         rend2D.drawString(Fonts.normal, value.getName() + " \u00A7p[\u00A7r" + value.getObject() + "\u00A7p]", x + 5, y + 5, 0xffffffff, false);
     }
 
-    @Override
-    public void keyPressed(int key) {
 
-    }
 }

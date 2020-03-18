@@ -3,11 +3,9 @@ package me.aerclient.visual.render.render2D;
 import com.darkmagician6.eventapi.EventManager;
 import me.aerclient.Aer;
 import me.aerclient.implementation.command.CommandManager;
-import me.aerclient.injection.events.net.EventChatRecieved;
-import me.aerclient.injection.events.net.EventChatSent;
 import me.aerclient.implementation.utils.Utilities;
+import me.aerclient.injection.events.net.EventChatSent;
 import net.minecraft.client.gui.ChatLine;
-import net.minecraft.network.play.server.SPacketChat;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentString;
 
@@ -89,13 +87,6 @@ public class ChatUtils implements Utilities {
 		return !((EventChatSent) EventManager.call(new EventChatSent(s))).isCancelled();
 	}
 
-
-	/**
-	 * Called whenever a chat message is recieved from the server
-	 */
-	public static boolean onRecieveChatMessage(SPacketChat packet) {
-		return ((EventChatRecieved) EventManager.call(new EventChatRecieved(packet.getChatComponent().getFormattedText()))).isCancelled();
-	}
 
 }
 	

@@ -14,17 +14,18 @@ import com.darkmagician6.eventapi.EventManager;
 import me.aerclient.injection.events.client.EventValueChanged;
 
 import java.util.Properties;
-import java.util.function.Predicate;
 
 public abstract class Value<T> {
     private String name;
+    private String description;
     protected T object;
     private T defaultVal;
 
-    Value(String name, T defaultVal) {
+    Value(String name, String description, T defaultVal) {
         this.name = name;
         this.object = defaultVal;
         this.defaultVal = defaultVal;
+        this.description = description;
     }
 
     public abstract void addToProperties(Properties props);
@@ -48,6 +49,10 @@ public abstract class Value<T> {
 
     public Object getDefault() {
         return defaultVal;
+    }
+
+    public String getDescription() {
+        return description;
     }
 
 }

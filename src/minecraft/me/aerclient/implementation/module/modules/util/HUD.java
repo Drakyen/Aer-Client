@@ -1,17 +1,18 @@
 package me.aerclient.implementation.module.modules.util;
 
 import com.darkmagician6.eventapi.EventTarget;
-import me.aerclient.injection.events.render.EventRenderOverlays;
+import me.aerclient.config.valuesystem.BooleanValue;
+import me.aerclient.config.valuesystem.NumberValue;
 import me.aerclient.implementation.module.base.Category;
 import me.aerclient.implementation.module.base.Module;
 import me.aerclient.implementation.module.base.ModuleManager;
-import me.aerclient.visual.render.RainbowUtil;
-import me.aerclient.visual.render.LengthSorter;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.implementation.utils.player.PlayerUtil;
-import me.aerclient.config.valuesystem.BooleanValue;
-import me.aerclient.config.valuesystem.NumberValue;
+import me.aerclient.injection.events.render.EventRenderOverlays;
+import me.aerclient.visual.render.LengthSorter;
+import me.aerclient.visual.render.RainbowUtil;
+import me.aerclient.visual.render.render2D.font.Fonts;
 import net.minecraft.client.gui.ScaledResolution;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -23,17 +24,17 @@ public class HUD extends Module {
 
     private DecimalFormat df2 = new DecimalFormat("#");
     private RainbowUtil rbw = new RainbowUtil(3);
-    private BooleanValue useGuiColours = new BooleanValue("UseGUIColors", true);
-    private NumberValue red = new NumberValue("Red", 0.5f, 0.0f, 1f, true);
-    private NumberValue green = new NumberValue("Green", 0.9f, 0.0f, 1f, true);
-    private NumberValue blue = new NumberValue("Blue", 0.6f, 0.0f, 1f, true);
-    private BooleanValue coords = new BooleanValue("Coords", true);
-    private BooleanValue netherCoords = new BooleanValue("NetherCoords", true);
-    private BooleanValue direction = new BooleanValue("Direction", true);
-    private BooleanValue showYpos = new BooleanValue("ShowYPos", false);
-    private BooleanValue armor = new BooleanValue("Armor", true);
-    private BooleanValue modList = new BooleanValue("ModList", false);
-    private BooleanValue rainbow = new BooleanValue("Rainbow", false);
+    private BooleanValue useGuiColours = new BooleanValue("UseGUIColors", "Whether to use the GUI colours for the HUD", true);
+    private NumberValue<Float> red = new NumberValue<>("Red", "Red component for the HUD colour", 0.5f, 0.0f, 1f, true);
+    private NumberValue<Float> green = new NumberValue<>("Green", "Green component for the HUD colour", 0.9f, 0.0f, 1f, true);
+    private NumberValue<Float> blue = new NumberValue<>("Blue", "Blue component for the HUD colour", 0.6f, 0.0f, 1f, true);
+    private BooleanValue coords = new BooleanValue("Coords", "Shows overworld coords", true);
+    private BooleanValue netherCoords = new BooleanValue("NetherCoords", "Shows nether coords", true);
+    private BooleanValue direction = new BooleanValue("Direction", "Shows which way you're facing", true);
+    private BooleanValue showYpos = new BooleanValue("ShowYPos", "Shows your Y position (height)", false);
+    private BooleanValue armor = new BooleanValue("Armor", "Shows your armor on your hotbar", true);
+    private BooleanValue modList = new BooleanValue("ModList", "Shows the active modules onscreen", false);
+    private BooleanValue rainbow = new BooleanValue("Rainbow", "Makes the HUD cycle through rainbow colours!", false);
     private HashMap animations = new HashMap<Module, Integer>();
     private boolean hasReset = false;
 
@@ -79,7 +80,7 @@ public class HUD extends Module {
             darkcol = temp.darker().getRGB();
             lightcol = temp.brighter().getRGB();
         } else {
-            Color temp = new Color(red.getValue().floatValue(), green.getValue().floatValue(), blue.getValue().floatValue(), 1f);
+            Color temp = new Color(red.getValue(), green.getValue(), blue.getValue(), 1f);
             col = temp.getRGB();
             darkcol = temp.darker().getRGB();
             lightcol = temp.brighter().getRGB();
@@ -226,28 +227,28 @@ public class HUD extends Module {
 			sortedModules.sort(c);
 
 			for (Module m : sortedModules) {
-				int animateX = ((Integer) animations.getOrDefault(m, new Integer(-1))).intValue();
+                int animateX = (Integer) animations.getOrDefault(m, -1);
 
-				if (m.isActive()) {
+                if (m.isActive()) {
                     if (animateX == -1) {
-                        animations.put(m, new Integer(0));
+                        animations.put(m, 0);
                         animateX = 0;
                     } else if (animateX < Fonts.mid.getStringWidth(m.getName()) + 1) {
                         animateX++;
                         animations.replace(m, animateX);
                     }
-				} else {
+                } else {
                     if (animateX > 0) {
                         animateX--;
                         animations.replace(m, animateX);
-                    } else if (animateX <= 0) {
+                    } else {
                         animations.remove(m);
                         animateX = 0;
                     }
                 }
 
 
-                rend2D.drawGradientRectHoriz(res.getScaledWidth() - animateX + 1, y + offset, (int) (res.getScaledWidth() + Fonts.mid.getStringWidth(m.getName()) - animateX + 2), y + offset + 12, 100f, darkcol, 0x99777777);
+                rend2D.drawGradHoriz(7, res.getScaledWidth() - animateX + 1, y + offset, (int) (res.getScaledWidth() + Fonts.mid.getStringWidth(m.getName()) - animateX + 2), y + offset + 12, darkcol, 0x99777777);
                 rend2D.drawVerticalLine(res.getScaledWidth() - animateX, y + offset - 1, y + offset + 12, lightcol);
                 rend2D.drawString(Fonts.mid, m.getName(), res.getScaledWidth() - animateX + 1, y + offset + 1, col, true);
 
@@ -256,6 +257,6 @@ public class HUD extends Module {
                 }
             }
 		}
-
+        GlStateManager.enableTexture2D();
 	}
 }

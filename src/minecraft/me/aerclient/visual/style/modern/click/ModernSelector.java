@@ -1,9 +1,9 @@
 package me.aerclient.visual.style.modern.click;
 
 import me.aerclient.config.valuesystem.ModeValue;
-import me.aerclient.visual.render.render2D.font.Fonts;
 import me.aerclient.visual.gui.click.base.ModuleButton;
 import me.aerclient.visual.gui.click.base.Selector;
+import me.aerclient.visual.render.render2D.font.Fonts;
 
 import java.awt.*;
 
@@ -24,11 +24,6 @@ public class ModernSelector extends Selector {
     }
 
     @Override
-    public void init() {
-
-    }
-
-    @Override
     public void render(int mouseX, int mouseY) {
         super.render(mouseX, mouseY);
         rend2D.drawRect(x, y, x + width, y + height, backgroundCol.getRGB());
@@ -42,13 +37,4 @@ public class ModernSelector extends Selector {
         rend2D.drawString(Fonts.normal, value.getName() + " \u00A7p[\u00A7r" + value.getObject() + "\u00A7p]", x + 5, y + 5, 0xffffffff, false);
     }
 
-    @Override
-    public void mouseReleased(int mouseX, int mouseY, int button) {
-
-    }
-
-    @Override
-    public void keyPressed(int key) {
-
-    }
 }
