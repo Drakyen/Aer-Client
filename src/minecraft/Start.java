@@ -1,6 +1,4 @@
 import net.minecraft.client.main.Main;
-import org.spongepowered.asm.launch.MixinBootstrap;
-import org.spongepowered.asm.mixin.Mixins;
 
 import java.util.Arrays;
 
