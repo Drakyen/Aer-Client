@@ -109,9 +109,7 @@ public class ClickTeleport extends Module {
             x = x + 0.5;
             z = z + 0.5;
             minecraft.player.setVelocity(x, y, z);
-            minecraft.player.onGround = true;
             minecraft.player.noClip = true;
-            minecraft.player.fallDistance = 0f;
         }
 	}
 
@@ -121,9 +119,9 @@ public class ClickTeleport extends Module {
             return;
         }
         if (run) {
-            minecraft.player.motionY -= minecraft.player.motionY;
-            minecraft.player.motionX -= minecraft.player.motionX;
-            minecraft.player.motionZ -= minecraft.player.motionZ;
+            minecraft.player.motionY = 0;
+            minecraft.player.motionX = 0;
+            minecraft.player.motionZ = 0;
             run = false;
         }
 	}

@@ -1,5 +1,6 @@
 package me.aer.implementation.utils;
 
+import me.aer.implementation.utils.exploits.AntikickUtil;
 import me.aer.implementation.utils.exploits.ClipUtil;
 import me.aer.visual.render.RenderUtils;
 import me.aer.visual.render.feather.util.TextureUtils;
@@ -10,4 +11,5 @@ public interface Utilities {
     ClipUtil clipUtil = new ClipUtil();
     Minecraft minecraft = Minecraft.getMinecraft();
     TextureUtils textureUtils = new TextureUtils();
+    AntikickUtil antiKickUtil = new AntikickUtil();
 }

@@ -12,7 +12,6 @@ import me.aer.visual.render.Fonts;
 import me.aer.visual.render.LengthSorter;
 import me.aer.visual.render.RainbowUtil;
 import net.minecraft.client.gui.ScaledResolution;
-import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.item.ItemStack;
 
 import java.awt.*;
@@ -257,6 +256,5 @@ public class HUD extends Module {
                 }
             }
 		}
-        GlStateManager.enableTexture2D();
 	}
 }
