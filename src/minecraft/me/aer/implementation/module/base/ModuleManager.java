@@ -9,6 +9,7 @@ import me.aer.implementation.module.modules.movement.Flight;
 import me.aer.implementation.module.modules.movement.Sprint;
 import me.aer.implementation.module.modules.player.Freecam;
 import me.aer.implementation.module.modules.player.NoFall;
+import me.aer.implementation.module.modules.player.Scaffold;
 import me.aer.implementation.module.modules.render.Brightness;
 import me.aer.implementation.module.modules.render.StorageESP;
 import me.aer.implementation.module.modules.render.Tracers;
@@ -50,33 +51,34 @@ public class ModuleManager {
 	 * Loads all modules into this ModuleManager
 	 */
 	public static void loadModules() {
-        //Combat
-        moduleList.add(new Aura());
-        //Movement
-        moduleList.add(new Flight());
-        moduleList.add(new ClickTeleport());
-        moduleList.add(new Sprint());
-        //Render
-        moduleList.add(new Brightness());
-        moduleList.add(new StorageESP());
-        moduleList.add(new Tracers());
-        moduleList.add(new XRay());
-        //World
+		//Combat
+		moduleList.add(new Aura());
+		//Movement
+		moduleList.add(new Flight());
+		moduleList.add(new ClickTeleport());
+		moduleList.add(new Sprint());
+		//Render
+		moduleList.add(new Brightness());
+		moduleList.add(new StorageESP());
+		moduleList.add(new Tracers());
+		moduleList.add(new XRay());
+		//World
 		moduleList.add(new Timer());
-        //Player
-        moduleList.add(new Freecam());
-        moduleList.add(new NoFall());
-        //Exploit
-        moduleList.add(new Ultraspeed());
-        //Utils
-        moduleList.add(new HUD());
-        moduleList.add(new ClickGui());
-        moduleList.add(new Dummy());
-        //Hidden
+		//Player
+		moduleList.add(new Freecam());
+		moduleList.add(new NoFall());
+		moduleList.add(new Scaffold());
+		//Exploit
+		moduleList.add(new Ultraspeed());
+		//Utils
+		moduleList.add(new HUD());
+		moduleList.add(new ClickGui());
+		moduleList.add(new Dummy());
+		//Hidden
 
 
-        //
-    }
+		//
+	}
 
 	/**
 	 * Returns all modules that are active (on)

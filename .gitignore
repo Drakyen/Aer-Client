@@ -1,5 +1,15 @@
 # Project exclude paths
 /out/
+/runtime/
+/jars/
+/src/minecraft/net/
+/src/minecraft/assets/
+/src/minecraft/com/
+/src/minecraft/javax/
+/src/minecraft/mcp/
+/src/minecraft/shadersmod/
+/src/minecraft/optifine/
+/src/minecraft/META-INF/
 ### Java template
 # Compiled class file
 *.class

@@ -12,20 +12,20 @@ import me.aer.injection.events.world.EventPreUpdate;
 
 public class Flight extends Module {
 
-	private NumberValue<Float> speed = new NumberValue<>("Speed", "How fast you move, in idgaf/second", 0.5f, 0f, 10f, false);
-	private ModeValue mode = new ModeValue("Mode", "Flight mode", "Vanilla", "Vanilla", "Freeze");
-	private BooleanValue antiKick = new BooleanValue("Anti-Kick", "Attempts to prevent the \"Flying is not enabled\" kick", true);
-	private BooleanValue antiDamage = new BooleanValue("Anti-Damage",
-			"Attempts to prevent you taking fall damage when landing. You may still take damage if you go down too fast.",
-			true);
-	private TimerUtil kickTimer = new TimerUtil();
+    private NumberValue<Float> speed = new NumberValue<>("Speed", "How fast you move, in idgaf/second", 0.5f, 0f, 10f, false);
+    private ModeValue mode = new ModeValue("Mode", "Flight mode", "Vanilla", "Vanilla", "Freeze");
+    private BooleanValue antiKick = new BooleanValue("Anti-Kick", "Attempts to prevent the \"Flying is not enabled\" kick", true);
+    private BooleanValue antiDamage = new BooleanValue("Anti-Damage",
+            "Attempts to prevent you taking fall damage when landing. You may still take damage if you go down too fast.",
+            true);
+    private TimerUtil kickTimer = new TimerUtil();
 
 
     public Flight() {
-		super("Flight", Category.MOVEMENT, "Allows you to fly.");
-	}
+        super("Flight", Category.MOVEMENT, "Allows you to fly.");
+    }
 
-	@EventTarget
+    @EventTarget
     public void eventPreUpdate(EventPreUpdate event) {
 
         if (antiDamage.getObject()) {
@@ -47,11 +47,11 @@ public class Flight extends Module {
             minecraft.player.capabilities.isFlying = false;
             minecraft.player.setVelocity(0, 0, 0);
             minecraft.player.setSpeedInAir(speed.getValue() / 2);
-		}
+        }
 
-		minecraft.player.inWater = false;
+        minecraft.player.inWater = false;
 
-	}
+    }
 
 	@EventTarget
 	public void onPreEntityLivingUpdate(EventPreEntityUpdate event) {
